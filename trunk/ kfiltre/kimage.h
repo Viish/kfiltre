@@ -28,8 +28,8 @@ class KImage
 protected:
     KImage *previousImage;
     KImage *nextImage;
-    bool saved;
     QString filename;
+    bool saved;
 
 public:
     int width;
