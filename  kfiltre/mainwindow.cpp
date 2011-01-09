@@ -142,6 +142,10 @@ void MainWindow::displayPixelColor(int x, int y)
         int u = yuv->green;
         int v = yuv->blue;
 
+        char buffer[50];
+        sprintf(buffer, "RGB : %d, %d, %d   YUV : %d, %d, %d", red, green, blue, y, u, v);
+        ui->statusBar->showMessage(buffer);
+
         std::cout << red << ',' << green << ',' << blue << std::endl;
         std::cout << y << ',' << u << ',' << v << std::endl;
     }

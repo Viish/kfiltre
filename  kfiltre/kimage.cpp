@@ -64,9 +64,9 @@ KImage::KImage(QString filename) :
 KImage::KImage(int width, int height, QString filename) :
         previousImage(NULL),
         nextImage(NULL),
-        width(width), height(height),
         filename(filename),
-        saved(false)
+        saved(false),
+        width(width), height(height)
 {
     this->matrix = new KRGB*[this->width];
 
