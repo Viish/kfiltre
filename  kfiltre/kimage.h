@@ -3,6 +3,7 @@
 
 #include <QImage>
 #include <QRgb>
+#include "kfiltre.h"
 
 #define C_RED 0.299
 #define C_GREEN 0.587
@@ -46,6 +47,10 @@ public:
     KImage* copy();
     KImage* getPrevious();
     KImage* getNext();
+    KImage* applyFilter(KFiltre *);
+    KImage* resize(int, int, bool scale = false);
+    KImage* fusion(KImage* image, int factor);
+
     void setNext(KImage*);
     void removePrevious();
     void removeNext();
@@ -54,6 +59,9 @@ public:
     void setNextUnsaved();
 
     friend class KRGB;
+
+private :
+    KRGB** getPixels(int, int, int);
 };
 
 #endif // KIMAGE_H

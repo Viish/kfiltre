@@ -2,6 +2,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "tab.h"
+#include "kfiltre.h"
+#include "ui_fusion.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -58,13 +60,66 @@ void MainWindow::saveAs()
     image.save(filename, format.toStdString().c_str());
 
     getCurrentImage()->setFilename(filename);
-    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), filename);
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), getCroppedFilename());
+
+    this->getCurrentImage()->setSaved(true);
+    disableSave();
 }
 
 void MainWindow::toGray()
 {
-    std::cerr << "void MainWindow::toGray()" << std::endl;
     this->refresh(this->getCurrentImage()->toGrayScale());
+    this->enableUndo();
+}
+
+void MainWindow::resize()
+{
+    this->refresh(this->getCurrentImage()->resize(350, 450));
+    this->enableUndo();
+}
+
+void MainWindow::fusion()
+{
+    KFusion *fusionDialog = new KFusion(this);
+    fusionDialog->show();
+}
+
+void MainWindow::validateFusion(KImage *fusionImage, int factor)
+{
+    this->refresh(getCurrentTab()->getImage()->fusion(fusionImage, factor));
+    delete fusionImage;
+}
+
+void MainWindow::applyBlur()
+{
+    KFiltre *filterBlur = new KFiltre(BLUR);
+    this->refresh(this->getCurrentImage()->applyFilter(filterBlur));
+    this->enableUndo();
+}
+
+void MainWindow::applyEdgeEnhancement()
+{
+    KFiltre *filterEdge = new KFiltre(EDGE_H);
+    KImage *temp = this->getCurrentImage()->applyFilter(filterEdge);
+
+    filterEdge = new KFiltre(EDGE_V);
+    this->refresh(temp->applyFilter(filterEdge));
+    delete temp;
+
+    this->enableUndo();
+}
+
+void MainWindow::applyEdgeDetection()
+{
+    KFiltre *filterEdge = new KFiltre(LAPLACIEN);
+    this->getCurrentTab()->refresh(this->getCurrentImage()->applyFilter(filterEdge));
+    this->enableUndo();
+}
+
+void MainWindow::applyPaintEffect()
+{
+    KFiltre *filterEdge = new KFiltre(PAINT);
+    this->getCurrentTab()->refresh(this->getCurrentImage()->applyFilter(filterEdge));
     this->enableUndo();
 }
 
@@ -145,9 +200,6 @@ void MainWindow::displayPixelColor(int x, int y)
         char buffer[50];
         sprintf(buffer, "RGB : %d, %d, %d   YUV : %d, %d, %d", red, green, blue, y, u, v);
         ui->statusBar->showMessage(buffer);
-
-        std::cout << red << ',' << green << ',' << blue << std::endl;
-        std::cout << y << ',' << u << ',' << v << std::endl;
     }
 }
 
@@ -205,11 +257,17 @@ void MainWindow::crop()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
+    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index)" << std::endl;
     ui->tabWidget->removeTab(index);
+
+    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index) ui->tabWidget->count()" << std::endl;
     if (ui->tabWidget->count() <= 0)
     {
+        std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index) this->disableActions();" << std::endl;
         this->disableActions();
     }
+
+    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index)" << std::endl;
 }
 
 void MainWindow::selectAll()
@@ -262,30 +320,86 @@ void MainWindow::resizeSelection(int i, SIDE cote)
     if(cote == LEFT)
     {
         if(x1 < x2)
+        {
+            if (x1 + i >= x2)
+                i = x2 - x1 - 1;
+            else if (x1 + i < 0)
+                i = -x1;
+
             this->x1 += i;
-        else
+        }
+        else if(x2 < x1)
+        {
+            if (x2 + i >= x1)
+                i = x1 - x2 - 1;
+            else if (x2 + i < 0)
+                i = -x2;
+
             this->x2 += i;
+        }
     }
     else if(cote == RIGHT)
     {
         if(x1 > x2)
+        {
+            if(x1 + i <= x2)
+                i = x2 - x1 + 1;
+            else if (x1 + i > getCurrentImage()->width)
+                i = getCurrentImage()->width - x1;
+
             this->x1 += i;
-        else
+        }
+        else if(x2 > x1)
+        {
+            if (x2 + i <= x1)
+                i = x1 - x2 + 1;
+            else if (x2 + i > getCurrentImage()->width)
+                i = getCurrentImage()->width - x2;
+
             this->x2 += i;
+        }
     }
     else if(cote == TOP)
     {
         if(y1 < y2)
+        {
+            if (y1 + i >= y2)
+                i = y2 - y1 - 1;
+            else if(y1 + i < 0)
+                i = -y1;
+
             this->y1 += i;
-        else
+        }
+        else if (y2 < y1)
+        {
+            if (y2 + i >= y1)
+                i = y1 - y2 - 1;
+            else if(y2 + i < 0)
+                i = -y2;
+
             this->y2 += i;
+        }
     }
     else if(cote == BOTTOM)
     {
         if(y1 > y2)
+        {
+            if(y1 + i <= y2)
+                i = y2 - y1 + 1;
+            else if (y1 + i > getCurrentImage()->height)
+                i = getCurrentImage()->height - y1;
+
             this->y1 += i;
-        else
+        }
+        else if (y2 > y1)
+        {
+            if(y2 + i <= y1)
+                i = y1 - y2 + 1;
+            else if (y2 + i > getCurrentImage()->height)
+                i = getCurrentImage()->height - y2;
+
             this->y2 += i;
+        }
     }
     drawSelection();
 }
@@ -311,6 +425,10 @@ void MainWindow::disableActions()
     ui->actionRGB->setEnabled(false);
     ui->actionSave_as->setEnabled(false);
     ui->actionYUV->setEnabled(false);
+    ui->actionBlur->setEnabled(false);
+    ui->actionPaint->setEnabled(false);
+    ui->actionEdge_Enhancement->setEnabled(false);
+    ui->actionEdge_Detection->setEnabled(false);
     disableCrop();
     disableUndo();
     disableRedo();
@@ -323,6 +441,10 @@ void MainWindow::enableActions()
     ui->actionRGB->setEnabled(true);
     ui->actionSave_as->setEnabled(true);
     ui->actionYUV->setEnabled(true);
+    ui->actionBlur->setEnabled(true);
+    ui->actionPaint->setEnabled(true);
+    ui->actionEdge_Enhancement->setEnabled(true);
+    ui->actionEdge_Detection->setEnabled(true);
 }
 
 void MainWindow::enableUndo()
@@ -357,13 +479,25 @@ void MainWindow::disableCrop()
     ui->actionCrop->setEnabled(false);
 }
 
+QString MainWindow::getCroppedFilename()
+{
+    QString filename = getCurrentImage()->getFilename();
+    if (filename.contains("/"))
+    {
+        filename = filename.split("/")[filename.split("/").length()-1];
+    }
+    return filename;
+}
+
 void MainWindow::enableSave()
 {
+    ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), getCroppedFilename() + "*");
     ui->actionSave->setEnabled(true);
 }
 
 void MainWindow::disableSave()
 {
+    if (ui->tabWidget->count() > 0) ui->tabWidget->setTabText(ui->tabWidget->currentIndex(), getCroppedFilename());
     ui->actionSave->setEnabled(false);
 }
 
