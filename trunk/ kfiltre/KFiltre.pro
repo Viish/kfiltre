@@ -8,10 +8,15 @@ SOURCES += main.cpp \
     kimage.cpp \
     tab.cpp \
     histogram.cpp \
-    kgraphicsview.cpp
+    kgraphicsview.cpp \
+    kfiltre.cpp \
+    kfusion.cpp
 HEADERS += mainwindow.h \
     kimage.h \
     tab.h \
     histogram.h \
-    kgraphicsview.h
-FORMS += mainwindow.ui
+    kgraphicsview.h \
+    kfiltre.h \
+    kfusion.h
+FORMS += mainwindow.ui \
+    kfusion.ui

@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sat Jan 8 19:22:28 2011
-**      by: Qt User Interface Compiler version 4.6.2
+** Created: Mon Jan 10 16:25:56 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -53,6 +53,10 @@ public:
     QAction *actionRectangle;
     QAction *actionUndo;
     QAction *actionRedo;
+    QAction *actionBlur;
+    QAction *actionEdge_Enhancement;
+    QAction *actionPaint;
+    QAction *actionEdge_Detection;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -73,7 +77,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(600, 400);
+        MainWindow->resize(800, 600);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -129,14 +133,23 @@ public:
         actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
         actionRedo = new QAction(MainWindow);
         actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
+        actionBlur = new QAction(MainWindow);
+        actionBlur->setObjectName(QString::fromUtf8("actionBlur"));
+        actionEdge_Enhancement = new QAction(MainWindow);
+        actionEdge_Enhancement->setObjectName(QString::fromUtf8("actionEdge_Enhancement"));
+        actionPaint = new QAction(MainWindow);
+        actionPaint->setObjectName(QString::fromUtf8("actionPaint"));
+        actionEdge_Detection = new QAction(MainWindow);
+        actionEdge_Detection->setObjectName(QString::fromUtf8("actionEdge_Detection"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
         centralWidget->setSizePolicy(sizePolicy);
         gridLayout = new QGridLayout(centralWidget);
         gridLayout->setSpacing(6);
-        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setContentsMargins(3, 3, 3, 3);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setHorizontalSpacing(6);
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(6);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
@@ -156,7 +169,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 600, 21));
+        menuBar->setGeometry(QRect(0, 0, 800, 25));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuImage = new QMenu(menuBar);
@@ -198,9 +211,7 @@ public:
         menuImage->addAction(actionGrayscale);
         menuImage->addAction(actionFusion);
         menuImage->addAction(actionResize);
-        menuImage->addAction(actionEdge);
         menuTools->addAction(menuSelection->menuAction());
-        menuTools->addAction(actionColor_picker);
         menuSelection->addAction(actionSelect_all);
         menuSelection->addAction(actionNone);
         menuSelection->addSeparator();
@@ -209,6 +220,12 @@ public:
         menuHistogram->addAction(actionYUV);
         menuHistogram->addAction(actionEqualize);
         menuHistogram->addAction(actionNormalize);
+        menuFilters->addAction(actionBlur);
+        menuFilters->addAction(actionPaint);
+        menuFilters->addSeparator();
+        menuFilters->addAction(actionEdge_Detection);
+        menuFilters->addAction(actionEdge_Enhancement);
+        menuFilters->addSeparator();
         menuFilters->addAction(actionCustom);
         menu->addAction(actionAbout_us);
         menuEdit->addAction(actionUndo);
@@ -228,6 +245,12 @@ public:
         QObject::connect(actionNone, SIGNAL(triggered()), MainWindow, SLOT(cancelSelection()));
         QObject::connect(actionUndo, SIGNAL(triggered()), MainWindow, SLOT(undo()));
         QObject::connect(actionRedo, SIGNAL(triggered()), MainWindow, SLOT(redo()));
+        QObject::connect(actionBlur, SIGNAL(triggered()), MainWindow, SLOT(applyBlur()));
+        QObject::connect(actionEdge_Enhancement, SIGNAL(triggered()), MainWindow, SLOT(applyEdgeEnhancement()));
+        QObject::connect(actionPaint, SIGNAL(triggered()), MainWindow, SLOT(applyPaintEffect()));
+        QObject::connect(actionEdge_Detection, SIGNAL(triggered()), MainWindow, SLOT(applyEdgeDetection()));
+        QObject::connect(actionResize, SIGNAL(triggered()), MainWindow, SLOT(resize()));
+        QObject::connect(actionFusion, SIGNAL(triggered()), MainWindow, SLOT(fusion()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -256,8 +279,8 @@ public:
         actionCrop->setText(QApplication::translate("MainWindow", "Crop", 0, QApplication::UnicodeUTF8));
         actionCrop->setShortcut(QApplication::translate("MainWindow", "Ctrl+X", 0, QApplication::UnicodeUTF8));
         actionGrayscale->setText(QApplication::translate("MainWindow", "Grayscale", 0, QApplication::UnicodeUTF8));
-        actionFusion->setText(QApplication::translate("MainWindow", "Fusion", 0, QApplication::UnicodeUTF8));
-        actionResize->setText(QApplication::translate("MainWindow", "Resize", 0, QApplication::UnicodeUTF8));
+        actionFusion->setText(QApplication::translate("MainWindow", "Fusion...", 0, QApplication::UnicodeUTF8));
+        actionResize->setText(QApplication::translate("MainWindow", "Resize...", 0, QApplication::UnicodeUTF8));
         actionEdge->setText(QApplication::translate("MainWindow", "Edge", 0, QApplication::UnicodeUTF8));
         actionSelect->setText(QApplication::translate("MainWindow", "Select", 0, QApplication::UnicodeUTF8));
         actionColor_picker->setText(QApplication::translate("MainWindow", "Color picker", 0, QApplication::UnicodeUTF8));
@@ -265,7 +288,7 @@ public:
         actionRGB->setShortcut(QApplication::translate("MainWindow", "Ctrl+H", 0, QApplication::UnicodeUTF8));
         actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
         actionNormalize->setText(QApplication::translate("MainWindow", "Normalize", 0, QApplication::UnicodeUTF8));
-        actionCustom->setText(QApplication::translate("MainWindow", "Custom", 0, QApplication::UnicodeUTF8));
+        actionCustom->setText(QApplication::translate("MainWindow", "Custom...", 0, QApplication::UnicodeUTF8));
         actionAbout_us->setText(QApplication::translate("MainWindow", "About us", 0, QApplication::UnicodeUTF8));
         actionSave_as->setText(QApplication::translate("MainWindow", "Save as...", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
@@ -286,6 +309,10 @@ public:
         actionUndo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0, QApplication::UnicodeUTF8));
         actionRedo->setText(QApplication::translate("MainWindow", "Redo", 0, QApplication::UnicodeUTF8));
         actionRedo->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+Z", 0, QApplication::UnicodeUTF8));
+        actionBlur->setText(QApplication::translate("MainWindow", "Blur", 0, QApplication::UnicodeUTF8));
+        actionEdge_Enhancement->setText(QApplication::translate("MainWindow", "Edge Enhancement", 0, QApplication::UnicodeUTF8));
+        actionPaint->setText(QApplication::translate("MainWindow", "Paint", 0, QApplication::UnicodeUTF8));
+        actionEdge_Detection->setText(QApplication::translate("MainWindow", "Edge Detection", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0, QApplication::UnicodeUTF8));

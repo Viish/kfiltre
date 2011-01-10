@@ -22,10 +22,8 @@ Tab::Tab(MainWindow *main, QString filename) : lastItem(NULL)
 
 void Tab::refresh(KImage *newImage)
 {
-    std::cerr << "void Tab::refresh(KImage *image)" << std::endl;
-    if (this->image == newImage) std::cerr << "void Tab::refresh(KImage *image) : image = newImage..." << std::endl;
     //if (this->image != NULL) {
-        this->image->setNext(newImage);
+       this->image->setNext(newImage);
     //}
     this->setImage(newImage);
 }
@@ -37,18 +35,11 @@ KImage* Tab::getImage()
 
 void Tab::setImage(KImage *newImage)
 {
-    std::cerr << "void Tab::setImage(KImage *newImage)" << std::endl;
-    if (newImage == NULL) std::cerr << "void Tab::setImage(KImage *newImage) : newImage est null !" << std::endl;
-    std::cerr << "void Tab::setImage(KImage *newImage) this->image" << std::endl;
     this->image = newImage;
-    //delete this->scene;
-    std::cerr << "void Tab::setImage(KImage *newImage) this->scene" << std::endl;
+    delete this->scene;
     this->scene = new QGraphicsScene(this);
-    std::cerr << "void Tab::setImage(KImage *newImage) scene->addPixmap" << std::endl;
     scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
-    std::cerr << "void Tab::setImage(KImage *newImage) setScene" << std::endl;
     this->graphicsView->setScene(scene);
-    std::cerr << "void Tab::setImage(KImage *newImage) show" << std::endl;
     this->graphicsView->show();
 }
 

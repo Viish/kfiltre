@@ -9,6 +9,7 @@
 
 #include "histogram.h"
 #include "kimage.h"
+#include "kfusion.h"
 
 typedef class Tab tab;
 
@@ -41,6 +42,7 @@ public:
     void resizeSelection();
     void resizeSelection(int, SIDE);
     void refresh(KImage*);
+    void validateFusion(KImage*, int);
     Tab* getCurrentTab();
 
 public slots:
@@ -56,6 +58,12 @@ public slots:
         void setRectTool();
         void selectAll();
         void cancelSelection();
+        void applyBlur();
+        void applyEdgeEnhancement();
+        void applyPaintEffect();
+        void applyEdgeDetection();
+        void resize();
+        void fusion();
 
 protected:
     void changeEvent(QEvent *e);
@@ -79,6 +87,7 @@ private:
     void enableCrop();
     void enableSave();
     void disableSave();
+    QString getCroppedFilename();
 
 private slots:
     void on_tabWidget_currentChanged(QWidget* );

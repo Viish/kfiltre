@@ -76,7 +76,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -97,7 +97,6 @@
     <addaction name="actionGrayscale"/>
     <addaction name="actionFusion"/>
     <addaction name="actionResize"/>
-    <addaction name="actionEdge"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -113,7 +112,6 @@
      <addaction name="actionRectangle"/>
     </widget>
     <addaction name="menuSelection"/>
-    <addaction name="actionColor_picker"/>
    </widget>
    <widget class="QMenu" name="menuHistogram">
     <property name="title">
@@ -128,6 +126,12 @@
     <property name="title">
      <string>Filters</string>
     </property>
+    <addaction name="actionBlur"/>
+    <addaction name="actionPaint"/>
+    <addaction name="separator"/>
+    <addaction name="actionEdge_Detection"/>
+    <addaction name="actionEdge_Enhancement"/>
+    <addaction name="separator"/>
     <addaction name="actionCustom"/>
    </widget>
    <widget class="QMenu" name="menu">
@@ -217,12 +221,12 @@
   </action>
   <action name="actionFusion">
    <property name="text">
-    <string>Fusion</string>
+    <string>Fusion...</string>
    </property>
   </action>
   <action name="actionResize">
    <property name="text">
-    <string>Resize</string>
+    <string>Resize...</string>
    </property>
   </action>
   <action name="actionEdge">
@@ -260,7 +264,7 @@
   </action>
   <action name="actionCustom">
    <property name="text">
-    <string>Custom</string>
+    <string>Custom...</string>
    </property>
   </action>
   <action name="actionAbout_us">
@@ -333,6 +337,26 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Z</string>
+   </property>
+  </action>
+  <action name="actionBlur">
+   <property name="text">
+    <string>Blur</string>
+   </property>
+  </action>
+  <action name="actionEdge_Enhancement">
+   <property name="text">
+    <string>Edge Enhancement</string>
+   </property>
+  </action>
+  <action name="actionPaint">
+   <property name="text">
+    <string>Paint</string>
+   </property>
+  </action>
+  <action name="actionEdge_Detection">
+   <property name="text">
+    <string>Edge Detection</string>
    </property>
   </action>
  </widget>
@@ -547,6 +571,102 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionBlur</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applyBlur()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEdge_Enhancement</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applyEdgeEnhancement()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPaint</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applyPaintEffect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEdge_Detection</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>applyEdgeDetection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionResize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>resize()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFusion</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fusion()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open()</slot>
@@ -562,5 +682,11 @@
   <slot>moveSelection()</slot>
   <slot>undo()</slot>
   <slot>redo()</slot>
+  <slot>applyBlur()</slot>
+  <slot>applyEdgeEnhancement()</slot>
+  <slot>applyPaintEffect()</slot>
+  <slot>applyEdgeDetection()</slot>
+  <slot>resize()</slot>
+  <slot>fusion()</slot>
  </slots>
 </ui>
