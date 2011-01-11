@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\mainwindow.o
+./debug\kimage.o
+./debug\tab.o
+./debug\histogram.o
+./debug\kgraphicsview.o
+./debug\kfiltre.o
+./debug\kfusion.o
+./debug\moc_mainwindow.o
+./debug\moc_kfusion.o
+);
