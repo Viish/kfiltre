@@ -8,6 +8,7 @@
 class Histogram : public QFrame
 {
 protected:
+    KImage *image;
     int red[256];
     int green[256];
     int blue[256];
@@ -18,12 +19,15 @@ protected:
     int MAX_R, MAX_G, MAX_B;
     int MAX_Y, MAX_U, MAX_V;
     int VERTICAL_SCALE;
+    int min, max;
 
 public:
     Histogram(KImage*, bool yuv);
     void createRGB(KImage *);
     void createYUV(KImage *);
     void paintEvent(QPaintEvent *);
+    int normalize(int v);
+    KImage* normalize();
 };
 
 #endif // HISTOGRAM_H

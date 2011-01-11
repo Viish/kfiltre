@@ -8,7 +8,7 @@
 #define HORIZONTAL_MARGIN 2
 #define HORIZONTAL_SPACING 1
 
-Histogram::Histogram(KImage *image, bool yuv) : yuv(yuv)
+Histogram::Histogram(KImage *image, bool yuv) : yuv(yuv), image(image)
 {
     if (yuv) { createYUV(image); }
     else { createRGB(image); }
@@ -21,12 +21,19 @@ void Histogram::createRGB(KImage *image)
     {
         red[i] = green[i] = blue[i] = 0;
     }
+
+    min = 255; max = 0;
     for (int i = 0; i < image->width; ++i)
     {
         for (int j = 0; j < image->height; ++j)
         {
             KRGB *pixel;
             pixel = &(image->matrix[i][j]);
+
+            if ((pixel->red + pixel->green + pixel->blue) / 3 < min)
+                min = pixel->red;
+            if ((pixel->red + pixel->green + pixel->blue) / 3  > max)
+                max = pixel->red;
 
             this->red[pixel->red]++; if (this->red[pixel->red] > this->MAX_R) { this->MAX_R = this->red[pixel->red]; }
             this->green[pixel->green]++; if (this->green[pixel->green] > this->MAX_G) { this->MAX_G = this->green[pixel->green]; }
@@ -44,7 +51,6 @@ void Histogram::createRGB(KImage *image)
 
     this->setWindowTitle("RGB Histogram");
 
-    this->show();
     this->setGeometry(10, 10, int(255 * HORIZONTAL_SPACING) + HORIZONTAL_MARGIN * 2, (MAX_R + MAX_G + MAX_B) / VERTICAL_SCALE + VERTICAL_MARGIN * 2);
 }
 
@@ -78,8 +84,29 @@ void Histogram::createYUV(KImage *image)
 
     this->setWindowTitle("YUV Histogram");
 
-    this->show();
     this->setGeometry(10, 10, int(255 * HORIZONTAL_SPACING) + HORIZONTAL_MARGIN * 2, (MAX_Y + MAX_U + MAX_V) / VERTICAL_SCALE + VERTICAL_MARGIN * 2);
+}
+
+KImage* Histogram::normalize()
+{
+    KImage *normalizedImage = image->copy();
+
+    for (int i = 0; i < image->width; i++)
+    {
+        for (int j = 0; j < image->height; j++)
+        {
+            normalizedImage->matrix[i][j].red = normalize(image->matrix[i][j].red);
+            normalizedImage->matrix[i][j].green = normalize(image->matrix[i][j].green);
+            normalizedImage->matrix[i][j].blue = normalize(image->matrix[i][j].blue);
+        }
+    }
+
+    return normalizedImage;
+}
+
+int Histogram::normalize(int v)
+{
+    return (((v - min) * 255) / (max - min));
 }
 
 void Histogram::paintEvent(QPaintEvent *qpe)

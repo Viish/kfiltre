@@ -10,13 +10,16 @@ SOURCES += main.cpp \
     histogram.cpp \
     kgraphicsview.cpp \
     kfiltre.cpp \
-    kfusion.cpp
+    kfusion.cpp \
+    kresizedialog.cpp
 HEADERS += mainwindow.h \
     kimage.h \
     tab.h \
     histogram.h \
     kgraphicsview.h \
     kfiltre.h \
-    kfusion.h
+    kfusion.h \
+    kresizedialog.h
 FORMS += mainwindow.ui \
-    kfusion.ui
+    kfusion.ui \
+    kresizedialog.ui
