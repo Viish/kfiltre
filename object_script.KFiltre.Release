@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\mainwindow.o
+./release\kimage.o
+./release\tab.o
+./release\histogram.o
+./release\kgraphicsview.o
+./release\kfiltre.o
+./release\kfusion.o
+./release\moc_mainwindow.o
+./release\moc_kfusion.o
+);
