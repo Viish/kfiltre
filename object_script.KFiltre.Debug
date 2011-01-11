@@ -7,6 +7,8 @@ INPUT(
 ./debug\kgraphicsview.o
 ./debug\kfiltre.o
 ./debug\kfusion.o
+./debug\kresizedialog.o
 ./debug\moc_mainwindow.o
 ./debug\moc_kfusion.o
+./debug\moc_kresizedialog.o
 );

@@ -8,7 +8,7 @@
 #define HORIZONTAL_MARGIN 2
 #define HORIZONTAL_SPACING 1
 
-Histogram::Histogram(KImage *image, bool yuv) : yuv(yuv), image(image)
+Histogram::Histogram(KImage *image, bool yuv) : image(image), yuv(yuv)
 {
     if (yuv) { createYUV(image); }
     else { createRGB(image); }

@@ -4,8 +4,8 @@
 
 KFusion::KFusion(QWidget *parent) :
     QDialog(parent),
-    factor(50),
     ui(new Ui::KFusion),
+    factor(50),
     imageB(NULL)
 {
     ui->setupUi(this);
