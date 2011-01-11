@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kfusion.ui'
 **
-** Created: Mon Jan 10 17:28:43 2011
-**      by: Qt User Interface Compiler version 4.7.0
+** Created: Tue Jan 11 14:16:07 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/

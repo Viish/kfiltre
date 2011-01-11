@@ -2,13 +2,14 @@
 #define KFILTRE_H
 
 enum FILTER {
-    BLUR, EDGE_H, EDGE_V, PAINT, LAPLACIEN
+    BLUR, EDGE_H, EDGE_V, EDGE, PAINT, LAPLACIEN, PREWITT_X, PREWITT_Y
 };
 
 class KFiltre
 {
 public:
     KFiltre(FILTER);
+    KFiltre(int**, int);
     ~KFiltre();
     int **matrix;
     int taille;

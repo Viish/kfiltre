@@ -4,6 +4,7 @@
 #include "tab.h"
 #include "kfiltre.h"
 #include "ui_fusion.h"
+#include "kresizedialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -69,13 +70,35 @@ void MainWindow::saveAs()
 void MainWindow::toGray()
 {
     this->refresh(this->getCurrentImage()->toGrayScale());
-    this->enableUndo();
 }
 
-void MainWindow::resize()
+void MainWindow::resize(int width, int height, bool smart)
 {
-    this->refresh(this->getCurrentImage()->resize(350, 450));
-    this->enableUndo();
+    if (smart)
+        this->smartResize(width, height);
+    else
+        this->refresh(getCurrentImage()->resize(width, height));
+}
+
+void MainWindow::smartResize(int width, int height)
+{
+    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(width, height));
+}
+
+void MainWindow::smartResizeH()
+{
+    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width, getCurrentImage()->height - 1));
+}
+
+void MainWindow::smartResizeV()
+{
+    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width - 1, getCurrentImage()->height));
+}
+
+void MainWindow::showResizeDialog()
+{
+    KResizeDialog *resizeDialog = new KResizeDialog(this);
+    resizeDialog->show();
 }
 
 void MainWindow::fusion()
@@ -94,7 +117,6 @@ void MainWindow::applyBlur()
 {
     KFiltre *filterBlur = new KFiltre(BLUR);
     this->refresh(this->getCurrentImage()->applyFilter(filterBlur));
-    this->enableUndo();
 }
 
 void MainWindow::applyEdgeEnhancement()
@@ -105,22 +127,18 @@ void MainWindow::applyEdgeEnhancement()
     filterEdge = new KFiltre(EDGE_V);
     this->refresh(temp->applyFilter(filterEdge));
     delete temp;
-
-    this->enableUndo();
 }
 
 void MainWindow::applyEdgeDetection()
 {
-    KFiltre *filterEdge = new KFiltre(LAPLACIEN);
-    this->getCurrentTab()->refresh(this->getCurrentImage()->applyFilter(filterEdge));
-    this->enableUndo();
+    KFiltre *filterEdge = new KFiltre(EDGE);
+    this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
 }
 
 void MainWindow::applyPaintEffect()
 {
     KFiltre *filterEdge = new KFiltre(PAINT);
-    this->getCurrentTab()->refresh(this->getCurrentImage()->applyFilter(filterEdge));
-    this->enableUndo();
+    this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
 }
 
 void MainWindow::undo()
@@ -144,14 +162,22 @@ void MainWindow::redo()
     else this->enableSave();
 }
 
+void MainWindow::normalizeHistogram()
+{
+    this->histogram = new Histogram(this->getCurrentImage(), false);
+    this->refresh(histogram->normalize());
+}
+
 void MainWindow::showHistogram()
 {
     this->histogram = new Histogram(this->getCurrentImage(), false);
+    this->histogram->show();
 }
 
 void MainWindow::showYUVHistogram()
 {
     this->histogram = new Histogram(this->getCurrentImage(), true);
+    this->histogram->show();
 }
 
 void MainWindow::refresh(KImage* image)
@@ -191,14 +217,16 @@ void MainWindow::displayPixelColor(int x, int y)
         int red = rgb.red;
         int green = rgb.green;
         int blue = rgb.blue;
+        int energy = rgb.energy;
 
         KRGB *yuv = this->getCurrentImage()->matrix[x][y].copyToYUV();
         int y = yuv->red;
         int u = yuv->green;
         int v = yuv->blue;
+        delete yuv;
 
-        char buffer[50];
-        sprintf(buffer, "RGB : %d, %d, %d   YUV : %d, %d, %d", red, green, blue, y, u, v);
+        char buffer[65];
+        sprintf(buffer, "RGB : %d, %d, %d   YUV : %d, %d, %d   Energy : %d", red, green, blue, y, u, v, energy);
         ui->statusBar->showMessage(buffer);
     }
 }
@@ -429,6 +457,11 @@ void MainWindow::disableActions()
     ui->actionPaint->setEnabled(false);
     ui->actionEdge_Enhancement->setEnabled(false);
     ui->actionEdge_Detection->setEnabled(false);
+    ui->actionSelect_all->setEnabled(false);
+    ui->actionNone->setEnabled(false);
+    ui->actionFusion->setEnabled(false);
+    ui->actionResize->setEnabled(false);
+    ui->actionRectangle->setEnabled(false);
     disableCrop();
     disableUndo();
     disableRedo();
@@ -445,6 +478,11 @@ void MainWindow::enableActions()
     ui->actionPaint->setEnabled(true);
     ui->actionEdge_Enhancement->setEnabled(true);
     ui->actionEdge_Detection->setEnabled(true);
+    ui->actionSelect_all->setEnabled(true);
+    ui->actionNone->setEnabled(true);
+    ui->actionFusion->setEnabled(true);
+    ui->actionResize->setEnabled(true);
+    ui->actionRectangle->setEnabled(true);
 }
 
 void MainWindow::enableUndo()

@@ -6,6 +6,9 @@ KFiltre::~KFiltre()
     delete [] this->matrix;
 }
 
+KFiltre::KFiltre(int** matrix, int taille) : matrix(matrix), taille(taille), diviseur(1)
+{ }
+
 KFiltre::KFiltre(FILTER filtre) : diviseur(1)
 {
     switch (filtre)
@@ -81,6 +84,26 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         matrix[2][2] = 2;
         break;
 
+    case EDGE :
+        taille = 3;
+        matrix = new int*[taille];
+
+        for (int i = 0; i < taille; i++)
+        {
+            matrix[i] = new int[taille];
+            for (int j = 0; j < taille; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+
+        matrix[1][0] = 1;
+        matrix[0][1] = 1;
+        matrix[1][1] = -4;
+        matrix[1][2] = 1;
+        matrix[2][1] = 1;
+        break;
+
     case LAPLACIEN :
         taille = 3;
         matrix = new int*[taille];
@@ -95,6 +118,48 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         }
 
         matrix[1][1] = -8;
+        break;
+
+    case PREWITT_Y :
+        taille = 3;
+        matrix = new int*[taille];
+
+        for (int i = 0; i < taille; i++)
+        {
+            matrix[i] = new int[taille];
+            for (int j = 0; j < taille; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+
+        matrix[0][0] = -1;
+        matrix[0][1] = -1;
+        matrix[0][2] = -1;
+        matrix[2][0] = 1;
+        matrix[2][1] = 1;
+        matrix[2][2] = 1;
+        break;
+
+    case PREWITT_X :
+        taille = 3;
+        matrix = new int*[taille];
+
+        for (int i = 0; i < taille; i++)
+        {
+            matrix[i] = new int[taille];
+            for (int j = 0; j < taille; j++)
+            {
+                matrix[i][j] = 0;
+            }
+        }
+
+        matrix[0][0] = -1;
+        matrix[1][0] = -1;
+        matrix[2][0] = -1;
+        matrix[0][2] = 1;
+        matrix[1][2] = 1;
+        matrix[2][2] = 1;
         break;
     }
 }

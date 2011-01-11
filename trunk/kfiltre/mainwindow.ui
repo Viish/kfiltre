@@ -76,7 +76,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -97,21 +97,8 @@
     <addaction name="actionGrayscale"/>
     <addaction name="actionFusion"/>
     <addaction name="actionResize"/>
-   </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <widget class="QMenu" name="menuSelection">
-     <property name="title">
-      <string>Select</string>
-     </property>
-     <addaction name="actionSelect_all"/>
-     <addaction name="actionNone"/>
-     <addaction name="separator"/>
-     <addaction name="actionRectangle"/>
-    </widget>
-    <addaction name="menuSelection"/>
+    <addaction name="actionVertical_Resize"/>
+    <addaction name="actionHorizontal_Resize"/>
    </widget>
    <widget class="QMenu" name="menuHistogram">
     <property name="title">
@@ -144,19 +131,36 @@
     <property name="title">
      <string>Edit</string>
     </property>
+    <widget class="QMenu" name="menuSelect">
+     <property name="title">
+      <string>Select</string>
+     </property>
+     <addaction name="actionSelect_all"/>
+     <addaction name="actionNone"/>
+     <addaction name="actionRectangle"/>
+    </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="menuSelect"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuImage"/>
-   <addaction name="menuTools"/>
    <addaction name="menuHistogram"/>
    <addaction name="menuFilters"/>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QToolBar" name="toolBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="cursor">
+    <cursorShape>ArrowCursor</cursorShape>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -169,10 +173,30 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionUndo"/>
+   <addaction name="actionRedo"/>
+   <addaction name="separator"/>
+   <addaction name="actionSelect_all"/>
+   <addaction name="actionNone"/>
+   <addaction name="actionRectangle"/>
+   <addaction name="actionCrop"/>
   </widget>
   <action name="actionOpen">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/document-open.png</normaloff>icons/actions/document-open.png</iconset>
+   </property>
    <property name="text">
     <string>Open...</string>
+   </property>
+   <property name="iconText">
+    <string>Open</string>
    </property>
    <property name="toolTip">
     <string>Open</string>
@@ -180,8 +204,21 @@
    <property name="shortcut">
     <string>Ctrl+O</string>
    </property>
+   <property name="visible">
+    <bool>true</bool>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/devices/media-floppy.png</normaloff>icons/devices/media-floppy.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -204,6 +241,10 @@
    </property>
   </action>
   <action name="actionCrop">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/edit-cut.png</normaloff>icons/actions/edit-cut.png</iconset>
+   </property>
    <property name="text">
     <string>Crop</string>
    </property>
@@ -227,21 +268,6 @@
   <action name="actionResize">
    <property name="text">
     <string>Resize...</string>
-   </property>
-  </action>
-  <action name="actionEdge">
-   <property name="text">
-    <string>Edge</string>
-   </property>
-  </action>
-  <action name="actionSelect">
-   <property name="text">
-    <string>Select</string>
-   </property>
-  </action>
-  <action name="actionColor_picker">
-   <property name="text">
-    <string>Color picker</string>
    </property>
   </action>
   <action name="actionRGB">
@@ -271,6 +297,9 @@
    <property name="text">
     <string>About us</string>
    </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
   </action>
   <action name="actionSave_as">
    <property name="text">
@@ -291,15 +320,11 @@
     <string>Ctrl+Shift+H</string>
    </property>
   </action>
-  <action name="actionPrevious">
-   <property name="text">
-    <string>Previous</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Z</string>
-   </property>
-  </action>
   <action name="actionSelect_all">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/view-fullscreen.png</normaloff>icons/actions/view-fullscreen.png</iconset>
+   </property>
    <property name="text">
     <string>All</string>
    </property>
@@ -308,6 +333,10 @@
    </property>
   </action>
   <action name="actionNone">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/process-stop.png</normaloff>icons/actions/process-stop.png</iconset>
+   </property>
    <property name="text">
     <string>None</string>
    </property>
@@ -316,6 +345,10 @@
    </property>
   </action>
   <action name="actionRectangle">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/media-playback-stop.png</normaloff>icons/actions/media-playback-stop.png</iconset>
+   </property>
    <property name="text">
     <string>Rectangle</string>
    </property>
@@ -324,6 +357,10 @@
    </property>
   </action>
   <action name="actionUndo">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/edit-undo.png</normaloff>icons/actions/edit-undo.png</iconset>
+   </property>
    <property name="text">
     <string>Undo</string>
    </property>
@@ -332,6 +369,10 @@
    </property>
   </action>
   <action name="actionRedo">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/edit-redo.png</normaloff>icons/actions/edit-redo.png</iconset>
+   </property>
    <property name="text">
     <string>Redo</string>
    </property>
@@ -357,6 +398,22 @@
   <action name="actionEdge_Detection">
    <property name="text">
     <string>Edge Detection</string>
+   </property>
+  </action>
+  <action name="actionVertical_Resize">
+   <property name="text">
+    <string>Vertical Resize</string>
+   </property>
+   <property name="shortcut">
+    <string>V</string>
+   </property>
+  </action>
+  <action name="actionHorizontal_Resize">
+   <property name="text">
+    <string>Horizontal Resize</string>
+   </property>
+   <property name="shortcut">
+    <string>H</string>
    </property>
   </action>
  </widget>
@@ -636,10 +693,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionResize</sender>
+   <sender>actionFusion</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>resize()</slot>
+   <slot>fusion()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -652,10 +709,58 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionFusion</sender>
+   <sender>actionResize</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>fusion()</slot>
+   <slot>showResizeDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNormalize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>normalizeHistogram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionVertical_Resize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>smartResizeV()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHorizontal_Resize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>smartResizeH()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -686,7 +791,10 @@
   <slot>applyEdgeEnhancement()</slot>
   <slot>applyPaintEffect()</slot>
   <slot>applyEdgeDetection()</slot>
-  <slot>resize()</slot>
   <slot>fusion()</slot>
+  <slot>showResizeDialog()</slot>
+  <slot>normalizeHistogram()</slot>
+  <slot>smartResizeV()</slot>
+  <slot>smartResizeH()</slot>
  </slots>
 </ui>

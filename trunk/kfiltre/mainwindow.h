@@ -40,7 +40,9 @@ public:
     QRect getSelection();
     void moveSelection();
     void resizeSelection();
+    void resize(int, int, bool smart = false);
     void resizeSelection(int, SIDE);
+    void smartResize(int, int);
     void refresh(KImage*);
     void validateFusion(KImage*, int);
     Tab* getCurrentTab();
@@ -62,8 +64,11 @@ public slots:
         void applyEdgeEnhancement();
         void applyPaintEffect();
         void applyEdgeDetection();
-        void resize();
+        void showResizeDialog();
         void fusion();
+        void normalizeHistogram();
+        void smartResizeH();
+        void smartResizeV();
 
 protected:
     void changeEvent(QEvent *e);

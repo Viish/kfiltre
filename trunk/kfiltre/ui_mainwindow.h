@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Jan 10 16:25:56 2011
-**      by: Qt User Interface Compiler version 4.7.0
+** Created: Tue Jan 11 17:06:45 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -37,9 +37,6 @@ public:
     QAction *actionGrayscale;
     QAction *actionFusion;
     QAction *actionResize;
-    QAction *actionEdge;
-    QAction *actionSelect;
-    QAction *actionColor_picker;
     QAction *actionRGB;
     QAction *actionEqualize;
     QAction *actionNormalize;
@@ -47,7 +44,6 @@ public:
     QAction *actionAbout_us;
     QAction *actionSave_as;
     QAction *actionYUV;
-    QAction *actionPrevious;
     QAction *actionSelect_all;
     QAction *actionNone;
     QAction *actionRectangle;
@@ -57,6 +53,8 @@ public:
     QAction *actionEdge_Enhancement;
     QAction *actionPaint;
     QAction *actionEdge_Detection;
+    QAction *actionVertical_Resize;
+    QAction *actionHorizontal_Resize;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -64,12 +62,11 @@ public:
     QMenuBar *menuBar;
     QMenu *menuFile;
     QMenu *menuImage;
-    QMenu *menuTools;
-    QMenu *menuSelection;
     QMenu *menuHistogram;
     QMenu *menuFilters;
     QMenu *menu;
     QMenu *menuEdit;
+    QMenu *menuSelect;
     QStatusBar *statusBar;
     QToolBar *toolBar;
 
@@ -88,12 +85,25 @@ public:
         MainWindow->setDockNestingEnabled(false);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
+        actionOpen->setCheckable(false);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8("icons/actions/document-open.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen->setIcon(icon);
+        actionOpen->setVisible(true);
+        actionOpen->setMenuRole(QAction::TextHeuristicRole);
+        actionOpen->setIconVisibleInMenu(true);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8("icons/devices/media-floppy.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave->setIcon(icon1);
         actionClose = new QAction(MainWindow);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
         actionCrop = new QAction(MainWindow);
         actionCrop->setObjectName(QString::fromUtf8("actionCrop"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8("icons/actions/edit-cut.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionCrop->setIcon(icon2);
         actionGrayscale = new QAction(MainWindow);
         actionGrayscale->setObjectName(QString::fromUtf8("actionGrayscale"));
         actionGrayscale->setChecked(false);
@@ -101,12 +111,6 @@ public:
         actionFusion->setObjectName(QString::fromUtf8("actionFusion"));
         actionResize = new QAction(MainWindow);
         actionResize->setObjectName(QString::fromUtf8("actionResize"));
-        actionEdge = new QAction(MainWindow);
-        actionEdge->setObjectName(QString::fromUtf8("actionEdge"));
-        actionSelect = new QAction(MainWindow);
-        actionSelect->setObjectName(QString::fromUtf8("actionSelect"));
-        actionColor_picker = new QAction(MainWindow);
-        actionColor_picker->setObjectName(QString::fromUtf8("actionColor_picker"));
         actionRGB = new QAction(MainWindow);
         actionRGB->setObjectName(QString::fromUtf8("actionRGB"));
         actionEqualize = new QAction(MainWindow);
@@ -117,22 +121,36 @@ public:
         actionCustom->setObjectName(QString::fromUtf8("actionCustom"));
         actionAbout_us = new QAction(MainWindow);
         actionAbout_us->setObjectName(QString::fromUtf8("actionAbout_us"));
+        actionAbout_us->setMenuRole(QAction::AboutRole);
         actionSave_as = new QAction(MainWindow);
         actionSave_as->setObjectName(QString::fromUtf8("actionSave_as"));
         actionYUV = new QAction(MainWindow);
         actionYUV->setObjectName(QString::fromUtf8("actionYUV"));
-        actionPrevious = new QAction(MainWindow);
-        actionPrevious->setObjectName(QString::fromUtf8("actionPrevious"));
         actionSelect_all = new QAction(MainWindow);
         actionSelect_all->setObjectName(QString::fromUtf8("actionSelect_all"));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8("icons/actions/view-fullscreen.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSelect_all->setIcon(icon3);
         actionNone = new QAction(MainWindow);
         actionNone->setObjectName(QString::fromUtf8("actionNone"));
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8("icons/actions/process-stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNone->setIcon(icon4);
         actionRectangle = new QAction(MainWindow);
         actionRectangle->setObjectName(QString::fromUtf8("actionRectangle"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8("icons/actions/media-playback-stop.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRectangle->setIcon(icon5);
         actionUndo = new QAction(MainWindow);
         actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8("icons/actions/edit-undo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionUndo->setIcon(icon6);
         actionRedo = new QAction(MainWindow);
         actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8("icons/actions/edit-redo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRedo->setIcon(icon7);
         actionBlur = new QAction(MainWindow);
         actionBlur->setObjectName(QString::fromUtf8("actionBlur"));
         actionEdge_Enhancement = new QAction(MainWindow);
@@ -141,6 +159,10 @@ public:
         actionPaint->setObjectName(QString::fromUtf8("actionPaint"));
         actionEdge_Detection = new QAction(MainWindow);
         actionEdge_Detection->setObjectName(QString::fromUtf8("actionEdge_Detection"));
+        actionVertical_Resize = new QAction(MainWindow);
+        actionVertical_Resize->setObjectName(QString::fromUtf8("actionVertical_Resize"));
+        actionHorizontal_Resize = new QAction(MainWindow);
+        actionHorizontal_Resize->setObjectName(QString::fromUtf8("actionHorizontal_Resize"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -169,15 +191,11 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 25));
+        menuBar->setGeometry(QRect(0, 0, 800, 27));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuImage = new QMenu(menuBar);
         menuImage->setObjectName(QString::fromUtf8("menuImage"));
-        menuTools = new QMenu(menuBar);
-        menuTools->setObjectName(QString::fromUtf8("menuTools"));
-        menuSelection = new QMenu(menuTools);
-        menuSelection->setObjectName(QString::fromUtf8("menuSelection"));
         menuHistogram = new QMenu(menuBar);
         menuHistogram->setObjectName(QString::fromUtf8("menuHistogram"));
         menuFilters = new QMenu(menuBar);
@@ -186,19 +204,26 @@ public:
         menu->setObjectName(QString::fromUtf8("menu"));
         menuEdit = new QMenu(menuBar);
         menuEdit->setObjectName(QString::fromUtf8("menuEdit"));
+        menuSelect = new QMenu(menuEdit);
+        menuSelect->setObjectName(QString::fromUtf8("menuSelect"));
         MainWindow->setMenuBar(menuBar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QString::fromUtf8("statusBar"));
         MainWindow->setStatusBar(statusBar);
         toolBar = new QToolBar(MainWindow);
         toolBar->setObjectName(QString::fromUtf8("toolBar"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(toolBar->sizePolicy().hasHeightForWidth());
+        toolBar->setSizePolicy(sizePolicy1);
+        toolBar->setCursor(QCursor(Qt::ArrowCursor));
         toolBar->setAllowedAreas(Qt::AllToolBarAreas);
         MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
         menuBar->addAction(menuFile->menuAction());
         menuBar->addAction(menuEdit->menuAction());
         menuBar->addAction(menuImage->menuAction());
-        menuBar->addAction(menuTools->menuAction());
         menuBar->addAction(menuHistogram->menuAction());
         menuBar->addAction(menuFilters->menuAction());
         menuBar->addAction(menu->menuAction());
@@ -211,11 +236,8 @@ public:
         menuImage->addAction(actionGrayscale);
         menuImage->addAction(actionFusion);
         menuImage->addAction(actionResize);
-        menuTools->addAction(menuSelection->menuAction());
-        menuSelection->addAction(actionSelect_all);
-        menuSelection->addAction(actionNone);
-        menuSelection->addSeparator();
-        menuSelection->addAction(actionRectangle);
+        menuImage->addAction(actionVertical_Resize);
+        menuImage->addAction(actionHorizontal_Resize);
         menuHistogram->addAction(actionRGB);
         menuHistogram->addAction(actionYUV);
         menuHistogram->addAction(actionEqualize);
@@ -230,6 +252,20 @@ public:
         menu->addAction(actionAbout_us);
         menuEdit->addAction(actionUndo);
         menuEdit->addAction(actionRedo);
+        menuEdit->addAction(menuSelect->menuAction());
+        menuSelect->addAction(actionSelect_all);
+        menuSelect->addAction(actionNone);
+        menuSelect->addAction(actionRectangle);
+        toolBar->addAction(actionOpen);
+        toolBar->addAction(actionSave);
+        toolBar->addSeparator();
+        toolBar->addAction(actionUndo);
+        toolBar->addAction(actionRedo);
+        toolBar->addSeparator();
+        toolBar->addAction(actionSelect_all);
+        toolBar->addAction(actionNone);
+        toolBar->addAction(actionRectangle);
+        toolBar->addAction(actionCrop);
 
         retranslateUi(MainWindow);
         QObject::connect(actionClose, SIGNAL(triggered()), MainWindow, SLOT(close()));
@@ -249,8 +285,11 @@ public:
         QObject::connect(actionEdge_Enhancement, SIGNAL(triggered()), MainWindow, SLOT(applyEdgeEnhancement()));
         QObject::connect(actionPaint, SIGNAL(triggered()), MainWindow, SLOT(applyPaintEffect()));
         QObject::connect(actionEdge_Detection, SIGNAL(triggered()), MainWindow, SLOT(applyEdgeDetection()));
-        QObject::connect(actionResize, SIGNAL(triggered()), MainWindow, SLOT(resize()));
         QObject::connect(actionFusion, SIGNAL(triggered()), MainWindow, SLOT(fusion()));
+        QObject::connect(actionResize, SIGNAL(triggered()), MainWindow, SLOT(showResizeDialog()));
+        QObject::connect(actionNormalize, SIGNAL(triggered()), MainWindow, SLOT(normalizeHistogram()));
+        QObject::connect(actionVertical_Resize, SIGNAL(triggered()), MainWindow, SLOT(smartResizeV()));
+        QObject::connect(actionHorizontal_Resize, SIGNAL(triggered()), MainWindow, SLOT(smartResizeH()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -262,6 +301,7 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
         actionOpen->setText(QApplication::translate("MainWindow", "Open...", 0, QApplication::UnicodeUTF8));
+        actionOpen->setIconText(QApplication::translate("MainWindow", "Open", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionOpen->setToolTip(QApplication::translate("MainWindow", "Open", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
@@ -281,9 +321,6 @@ public:
         actionGrayscale->setText(QApplication::translate("MainWindow", "Grayscale", 0, QApplication::UnicodeUTF8));
         actionFusion->setText(QApplication::translate("MainWindow", "Fusion...", 0, QApplication::UnicodeUTF8));
         actionResize->setText(QApplication::translate("MainWindow", "Resize...", 0, QApplication::UnicodeUTF8));
-        actionEdge->setText(QApplication::translate("MainWindow", "Edge", 0, QApplication::UnicodeUTF8));
-        actionSelect->setText(QApplication::translate("MainWindow", "Select", 0, QApplication::UnicodeUTF8));
-        actionColor_picker->setText(QApplication::translate("MainWindow", "Color picker", 0, QApplication::UnicodeUTF8));
         actionRGB->setText(QApplication::translate("MainWindow", "RGB", 0, QApplication::UnicodeUTF8));
         actionRGB->setShortcut(QApplication::translate("MainWindow", "Ctrl+H", 0, QApplication::UnicodeUTF8));
         actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
@@ -297,8 +334,6 @@ public:
         actionSave_as->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+S", 0, QApplication::UnicodeUTF8));
         actionYUV->setText(QApplication::translate("MainWindow", "YUV", 0, QApplication::UnicodeUTF8));
         actionYUV->setShortcut(QApplication::translate("MainWindow", "Ctrl+Shift+H", 0, QApplication::UnicodeUTF8));
-        actionPrevious->setText(QApplication::translate("MainWindow", "Previous", 0, QApplication::UnicodeUTF8));
-        actionPrevious->setShortcut(QApplication::translate("MainWindow", "Ctrl+Z", 0, QApplication::UnicodeUTF8));
         actionSelect_all->setText(QApplication::translate("MainWindow", "All", 0, QApplication::UnicodeUTF8));
         actionSelect_all->setShortcut(QApplication::translate("MainWindow", "Ctrl+A", 0, QApplication::UnicodeUTF8));
         actionNone->setText(QApplication::translate("MainWindow", "None", 0, QApplication::UnicodeUTF8));
@@ -313,14 +348,17 @@ public:
         actionEdge_Enhancement->setText(QApplication::translate("MainWindow", "Edge Enhancement", 0, QApplication::UnicodeUTF8));
         actionPaint->setText(QApplication::translate("MainWindow", "Paint", 0, QApplication::UnicodeUTF8));
         actionEdge_Detection->setText(QApplication::translate("MainWindow", "Edge Detection", 0, QApplication::UnicodeUTF8));
+        actionVertical_Resize->setText(QApplication::translate("MainWindow", "Vertical Resize", 0, QApplication::UnicodeUTF8));
+        actionVertical_Resize->setShortcut(QApplication::translate("MainWindow", "V", 0, QApplication::UnicodeUTF8));
+        actionHorizontal_Resize->setText(QApplication::translate("MainWindow", "Horizontal Resize", 0, QApplication::UnicodeUTF8));
+        actionHorizontal_Resize->setShortcut(QApplication::translate("MainWindow", "H", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
-        menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0, QApplication::UnicodeUTF8));
-        menuSelection->setTitle(QApplication::translate("MainWindow", "Select", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));
         menuFilters->setTitle(QApplication::translate("MainWindow", "Filters", 0, QApplication::UnicodeUTF8));
         menu->setTitle(QApplication::translate("MainWindow", "?", 0, QApplication::UnicodeUTF8));
         menuEdit->setTitle(QApplication::translate("MainWindow", "Edit", 0, QApplication::UnicodeUTF8));
+        menuSelect->setTitle(QApplication::translate("MainWindow", "Select", 0, QApplication::UnicodeUTF8));
         toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
