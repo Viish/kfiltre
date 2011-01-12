@@ -36,16 +36,23 @@ KImage* Tab::getImage()
 void Tab::setImage(KImage *newImage)
 {
     this->image = newImage;
-    delete this->scene;
-    this->scene = new QGraphicsScene(this);
-    scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
-    this->graphicsView->setScene(scene);
+    this->scene->clear();
+    this->scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
     this->graphicsView->show();
+}
+
+void Tab::hideSelection()
+{
+    if (this->lastItem != NULL && this->scene != NULL && this->scene->items().contains(this->lastItem))
+    {
+        this->scene->removeItem(this->lastItem);
+    }
+    this->lastItem = NULL;
 }
 
 void Tab::drawRect(int x1, int y1, int x2, int y2)
 {
-    if (this->lastItem != NULL) { this->scene->removeItem(this->lastItem); }
+    hideSelection();
 
     if (x1 > x2 && y1 > y2)
     {

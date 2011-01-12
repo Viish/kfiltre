@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>KFiltre</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -281,11 +281,6 @@
     <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionEqualize">
-   <property name="text">
-    <string>Equalize</string>
-   </property>
-  </action>
   <action name="actionNormalize">
    <property name="text">
     <string>Normalize</string>
@@ -427,6 +422,11 @@
   <action name="actionSmooth">
    <property name="text">
     <string>Smooth</string>
+   </property>
+  </action>
+  <action name="actionEqualize">
+   <property name="text">
+    <string>Equalize</string>
    </property>
   </action>
  </widget>
@@ -817,6 +817,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionCustom</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showCustomDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEqualize</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>equalizeHistogram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open()</slot>
@@ -843,5 +875,7 @@
   <slot>smartResizeH()</slot>
   <slot>smooth()</slot>
   <slot>negative()</slot>
+  <slot>showCustomDialog()</slot>
+  <slot>equalizeHistogram()</slot>
  </slots>
 </ui>

@@ -5,6 +5,7 @@
 #include "kfiltre.h"
 #include "ui_fusion.h"
 #include "kresizedialog.h"
+#include "kmatrixdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -151,21 +152,29 @@ void MainWindow::applyPaintEffect()
     this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
 }
 
+void MainWindow::showCustomDialog()
+{
+    KmatrixDialog *matrixDialog = new KmatrixDialog(this);
+    matrixDialog->setFixedSize(158, 240);
+    matrixDialog->show();
+}
+
+void MainWindow::applyCustomMatrix(int** matrix, int size, int div)
+{
+    KFiltre *customFilter = new KFiltre(matrix, size, div);
+    this->refresh(this->getCurrentImage()->applyFilter(customFilter));
+}
+
 void MainWindow::undo()
 {
-    std::cerr << "void MainWindow::undo()" << std::endl;
     this->getCurrentTab()->undo();
-    std::cerr << "void MainWindow::undo() enableRedo" << std::endl;
     this->enableRedo();
-    std::cerr << "void MainWindow::undo() enableSave" << std::endl;
     if(this->getCurrentImage()->isSaved()) disableSave();
     else this->enableSave();
-    std::cerr << "void MainWindow::undo() END" << std::endl;
 }
 
 void MainWindow::redo()
 {
-    std::cerr << "void MainWindow::redo()" << std::endl;
     this->getCurrentTab()->redo();
     this->enableUndo();
     if(this->getCurrentImage()->isSaved()) disableSave();
@@ -176,6 +185,12 @@ void MainWindow::normalizeHistogram()
 {
     this->histogram = new Histogram(this->getCurrentImage(), false);
     this->refresh(histogram->normalize());
+}
+
+void MainWindow::equalizeHistogram()
+{
+    this->histogram = new Histogram(this->getCurrentImage(), false);
+    this->refresh(histogram->equalize());
 }
 
 void MainWindow::showHistogram()
@@ -322,9 +337,8 @@ void MainWindow::selectAll()
 void MainWindow::cancelSelection()
 {
     this->x1 = this->x2 = this->y1 = this->y2 = 0;
-
+    getCurrentTab()->hideSelection();
     disableCrop();
-    drawSelection();
 }
 
 void MainWindow::moveSelection()
@@ -472,6 +486,12 @@ void MainWindow::disableActions()
     ui->actionFusion->setEnabled(false);
     ui->actionResize->setEnabled(false);
     ui->actionRectangle->setEnabled(false);
+    ui->actionNegative->setEnabled(false);
+    ui->actionSmooth->setEnabled(false);
+    ui->actionNormalize->setEnabled(false);
+    ui->actionCustom->setEnabled(false);
+    ui->actionVertical_Resize->setEnabled(false);
+    ui->actionHorizontal_Resize->setEnabled(false);
     disableCrop();
     disableUndo();
     disableRedo();
@@ -493,10 +513,17 @@ void MainWindow::enableActions()
     ui->actionFusion->setEnabled(true);
     ui->actionResize->setEnabled(true);
     ui->actionRectangle->setEnabled(true);
+    ui->actionNegative->setEnabled(true);
+    ui->actionSmooth->setEnabled(true);
+    ui->actionNormalize->setEnabled(true);
+    ui->actionCustom->setEnabled(true);
+    ui->actionVertical_Resize->setEnabled(true);
+    ui->actionHorizontal_Resize->setEnabled(true);
 }
 
 void MainWindow::enableUndo()
 {
+    this->cancelSelection();
     ui->actionUndo->setEnabled(true);
     if (this->getCurrentTab()->isLast()) disableRedo();
 }
@@ -508,6 +535,7 @@ void MainWindow::disableUndo()
 
 void MainWindow::enableRedo()
 {
+    this->cancelSelection();
     ui->actionRedo->setEnabled(true);
     if (this->getCurrentTab()->isFirst()) this->disableUndo();
 }

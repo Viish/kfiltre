@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Tue Jan 11 21:10:59 2011
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.0)
+** Created: Wed Jan 12 17:23:15 2011
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -11,7 +11,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.0. It"
+#error "This file was generated using the moc from 4.6.2. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,10 +20,10 @@ QT_BEGIN_MOC_NAMESPACE
 static const uint qt_meta_data_MainWindow[] = {
 
  // content:
-       5,       // revision
+       4,       // revision
        0,       // classname
        0,    0, // classinfo
-      25,   14, // methods
+      27,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -47,15 +47,17 @@ static const uint qt_meta_data_MainWindow[] = {
      156,   11,   11,   11, 0x0a,
      179,   11,   11,   11, 0x0a,
      198,   11,   11,   11, 0x0a,
-     219,   11,   11,   11, 0x0a,
+     217,   11,   11,   11, 0x0a,
      238,   11,   11,   11, 0x0a,
-     247,   11,   11,   11, 0x0a,
-     268,   11,   11,   11, 0x0a,
-     283,   11,   11,   11, 0x0a,
-     298,   11,   11,   11, 0x0a,
+     257,   11,   11,   11, 0x0a,
+     266,   11,   11,   11, 0x0a,
+     287,   11,   11,   11, 0x0a,
      307,   11,   11,   11, 0x0a,
-     318,   11,   11,   11, 0x08,
-     362,  356,   11,   11, 0x08,
+     322,   11,   11,   11, 0x0a,
+     337,   11,   11,   11, 0x0a,
+     346,   11,   11,   11, 0x0a,
+     357,   11,   11,   11, 0x08,
+     401,  395,   11,   11, 0x08,
 
        0        // eod
 };
@@ -66,9 +68,10 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "showHistogram()\0showYUVHistogram()\0"
     "setRectTool()\0selectAll()\0cancelSelection()\0"
     "applyBlur()\0applyEdgeEnhancement()\0"
-    "applyPaintEffect()\0applyEdgeDetection()\0"
-    "showResizeDialog()\0fusion()\0"
-    "normalizeHistogram()\0smartResizeH()\0"
+    "applyPaintEffect()\0showCustomDialog()\0"
+    "applyEdgeDetection()\0showResizeDialog()\0"
+    "fusion()\0normalizeHistogram()\0"
+    "equalizeHistogram()\0smartResizeH()\0"
     "smartResizeV()\0smooth()\0negative()\0"
     "on_tabWidget_currentChanged(QWidget*)\0"
     "index\0on_tabWidget_tabCloseRequested(int)\0"
@@ -118,19 +121,21 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 12: applyBlur(); break;
         case 13: applyEdgeEnhancement(); break;
         case 14: applyPaintEffect(); break;
-        case 15: applyEdgeDetection(); break;
-        case 16: showResizeDialog(); break;
-        case 17: fusion(); break;
-        case 18: normalizeHistogram(); break;
-        case 19: smartResizeH(); break;
-        case 20: smartResizeV(); break;
-        case 21: smooth(); break;
-        case 22: negative(); break;
-        case 23: on_tabWidget_currentChanged((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
-        case 24: on_tabWidget_tabCloseRequested((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 15: showCustomDialog(); break;
+        case 16: applyEdgeDetection(); break;
+        case 17: showResizeDialog(); break;
+        case 18: fusion(); break;
+        case 19: normalizeHistogram(); break;
+        case 20: equalizeHistogram(); break;
+        case 21: smartResizeH(); break;
+        case 22: smartResizeV(); break;
+        case 23: smooth(); break;
+        case 24: negative(); break;
+        case 25: on_tabWidget_currentChanged((*reinterpret_cast< QWidget*(*)>(_a[1]))); break;
+        case 26: on_tabWidget_tabCloseRequested((*reinterpret_cast< int(*)>(_a[1]))); break;
         default: ;
         }
-        _id -= 25;
+        _id -= 27;
     }
     return _id;
 }

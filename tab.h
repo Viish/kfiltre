@@ -25,6 +25,7 @@ public:
     KImage* getImage();
     void setImage(KImage*);
     void refresh(KImage*);
+    void hideSelection();
     void drawRect(int, int, int, int);
     void undo();
     void redo();
