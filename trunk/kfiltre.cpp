@@ -6,7 +6,7 @@ KFiltre::~KFiltre()
     delete [] this->matrix;
 }
 
-KFiltre::KFiltre(int** matrix, int taille) : matrix(matrix), taille(taille), diviseur(1)
+KFiltre::KFiltre(int** matrix, int taille, int diviseur) : matrix(matrix), taille(taille), diviseur(diviseur)
 { }
 
 KFiltre::KFiltre(FILTER filtre) : diviseur(1)

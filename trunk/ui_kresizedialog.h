@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kresizedialog.ui'
 **
-** Created: Wed 12. Jan 00:31:19 2011
-**      by: Qt User Interface Compiler version 4.7.0
+** Created: Wed Jan 12 15:34:01 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -36,7 +36,9 @@ public:
     QLabel *label_2;
     QCheckBox *checkBox;
     QCheckBox *checkBox_2;
+    QGridLayout *gridLayout_3;
     QDialogButtonBox *buttonBox;
+    QDialogButtonBox *buttonBox_2;
 
     void setupUi(QDialog *KResizeDialog)
     {
@@ -100,20 +102,32 @@ public:
 
         gridLayout->addLayout(gridLayout_2, 0, 0, 1, 1);
 
+        gridLayout_3 = new QGridLayout();
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         buttonBox = new QDialogButtonBox(KResizeDialog);
         buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
         buttonBox->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        buttonBox->setStandardButtons(QDialogButtonBox::Apply);
 
-        gridLayout->addWidget(buttonBox, 1, 0, 1, 1);
+        gridLayout_3->addWidget(buttonBox, 0, 0, 1, 1);
+
+        buttonBox_2 = new QDialogButtonBox(KResizeDialog);
+        buttonBox_2->setObjectName(QString::fromUtf8("buttonBox_2"));
+        buttonBox_2->setLayoutDirection(Qt::RightToLeft);
+        buttonBox_2->setStandardButtons(QDialogButtonBox::Close);
+
+        gridLayout_3->addWidget(buttonBox_2, 0, 1, 1, 1);
+
+
+        gridLayout->addLayout(gridLayout_3, 1, 0, 1, 1);
 
 
         retranslateUi(KResizeDialog);
         QObject::connect(spinBox, SIGNAL(valueChanged(int)), KResizeDialog, SLOT(changeHeightValue()));
         QObject::connect(spinBox_2, SIGNAL(valueChanged(int)), KResizeDialog, SLOT(changeWidthValue()));
-        QObject::connect(buttonBox, SIGNAL(accepted()), KResizeDialog, SLOT(validateResize()));
-        QObject::connect(buttonBox, SIGNAL(accepted()), KResizeDialog, SLOT(close()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), KResizeDialog, SLOT(close()));
+        QObject::connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), KResizeDialog, SLOT(validateResize()));
+        QObject::connect(buttonBox_2, SIGNAL(clicked(QAbstractButton*)), KResizeDialog, SLOT(close()));
 
         QMetaObject::connectSlotsByName(KResizeDialog);
     } // setupUi

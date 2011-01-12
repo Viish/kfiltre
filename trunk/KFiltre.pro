@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     kgraphicsview.cpp \
     kfiltre.cpp \
     kfusion.cpp \
-    kresizedialog.cpp
+    kresizedialog.cpp \
+    kmatrixdialog.cpp
 HEADERS += mainwindow.h \
     kimage.h \
     tab.h \
@@ -19,7 +20,9 @@ HEADERS += mainwindow.h \
     kgraphicsview.h \
     kfiltre.h \
     kfusion.h \
-    kresizedialog.h
+    kresizedialog.h \
+    kmatrixdialog.h
 FORMS += mainwindow.ui \
     kfusion.ui \
-    kresizedialog.ui
+    kresizedialog.ui \
+    kmatrixdialog.ui

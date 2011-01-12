@@ -46,6 +46,7 @@ public:
     void refresh(KImage*);
     void validateFusion(KImage*, int);
     Tab* getCurrentTab();
+    void applyCustomMatrix(int**, int, int);
 
 public slots:
         void open();
@@ -63,10 +64,12 @@ public slots:
         void applyBlur();
         void applyEdgeEnhancement();
         void applyPaintEffect();
+        void showCustomDialog();
         void applyEdgeDetection();
         void showResizeDialog();
         void fusion();
         void normalizeHistogram();
+        void equalizeHistogram();
         void smartResizeH();
         void smartResizeV();
         void smooth();

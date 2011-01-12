@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kfusion.ui'
 **
-** Created: Wed 12. Jan 00:31:19 2011
-**      by: Qt User Interface Compiler version 4.7.0
+** Created: Wed Jan 12 16:14:55 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -103,7 +103,7 @@ public:
 
     void retranslateUi(QDialog *KFusion)
     {
-        KFusion->setWindowTitle(QApplication::translate("KFusion", "Dialog", 0, QApplication::UnicodeUTF8));
+        KFusion->setWindowTitle(QApplication::translate("KFusion", "Fusion", 0, QApplication::UnicodeUTF8));
         label->setText(QApplication::translate("KFusion", "50", 0, QApplication::UnicodeUTF8));
         parcourir->setText(QApplication::translate("KFusion", "Parcourir...", 0, QApplication::UnicodeUTF8));
     } // retranslateUi

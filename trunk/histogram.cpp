@@ -41,6 +41,16 @@ void Histogram::createRGB(KImage *image)
         }
     }
 
+    redCumul[0] = red[0];
+    greenCumul[0] = green[0];
+    blueCumul[0] = blue[0];
+    for(int i = 1; i < 256; i++)
+    {
+        redCumul[i] = redCumul[i - 1] + red[i];
+        greenCumul[i] = greenCumul[i - 1] + green[i];
+        blueCumul[i] = blueCumul[i - 1] + blue[i];
+    }
+
     QDesktopWidget desk;
     QRect rect = desk.screenGeometry();
     this->VERTICAL_SCALE = 1;
@@ -107,6 +117,28 @@ KImage* Histogram::normalize()
 int Histogram::normalize(int v)
 {
     return (((v - min) * 255) / (max - min));
+}
+
+KImage* Histogram::equalize()
+{
+    KImage *equalizedImage = image->copy();
+
+    for (int i = 0; i < image->width; i++)
+    {
+        for (int j = 0; j < image->height; j++)
+        {
+            equalizedImage->matrix[i][j].red = equalize(redCumul[image->matrix[i][j].red]);
+            equalizedImage->matrix[i][j].green = equalize(greenCumul[image->matrix[i][j].green]);
+            equalizedImage->matrix[i][j].blue = equalize(blueCumul[image->matrix[i][j].blue]);
+        }
+    }
+
+    return equalizedImage;
+}
+
+int Histogram::equalize(int v)
+{
+    return (((max - min) * v + min) / (image->width * image->height));
 }
 
 void Histogram::paintEvent(QPaintEvent *qpe)

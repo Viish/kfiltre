@@ -9,7 +9,7 @@ class KFiltre
 {
 public:
     KFiltre(FILTER);
-    KFiltre(int**, int);
+    KFiltre(int**, int, int);
     ~KFiltre();
     int **matrix;
     int taille;

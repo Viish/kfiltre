@@ -12,6 +12,9 @@ protected:
     int red[256];
     int green[256];
     int blue[256];
+    int redCumul[256];
+    int greenCumul[256];
+    int blueCumul[256];
     int y[256];
     int u[256];
     int v[256];
@@ -28,6 +31,8 @@ public:
     void paintEvent(QPaintEvent *);
     int normalize(int v);
     KImage* normalize();
+    int equalize(int v);
+    KImage* equalize();
 };
 
 #endif // HISTOGRAM_H

@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed 12. Jan 00:31:19 2011
-**      by: Qt User Interface Compiler version 4.7.0
+** Created: Wed Jan 12 17:06:19 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -38,7 +38,6 @@ public:
     QAction *actionFusion;
     QAction *actionResize;
     QAction *actionRGB;
-    QAction *actionEqualize;
     QAction *actionNormalize;
     QAction *actionCustom;
     QAction *actionAbout_us;
@@ -57,6 +56,7 @@ public:
     QAction *actionHorizontal_Resize;
     QAction *actionNegative;
     QAction *actionSmooth;
+    QAction *actionEqualize;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -115,8 +115,6 @@ public:
         actionResize->setObjectName(QString::fromUtf8("actionResize"));
         actionRGB = new QAction(MainWindow);
         actionRGB->setObjectName(QString::fromUtf8("actionRGB"));
-        actionEqualize = new QAction(MainWindow);
-        actionEqualize->setObjectName(QString::fromUtf8("actionEqualize"));
         actionNormalize = new QAction(MainWindow);
         actionNormalize->setObjectName(QString::fromUtf8("actionNormalize"));
         actionCustom = new QAction(MainWindow);
@@ -169,6 +167,8 @@ public:
         actionNegative->setObjectName(QString::fromUtf8("actionNegative"));
         actionSmooth = new QAction(MainWindow);
         actionSmooth->setObjectName(QString::fromUtf8("actionSmooth"));
+        actionEqualize = new QAction(MainWindow);
+        actionEqualize->setObjectName(QString::fromUtf8("actionEqualize"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -301,6 +301,8 @@ public:
         QObject::connect(actionHorizontal_Resize, SIGNAL(triggered()), MainWindow, SLOT(smartResizeH()));
         QObject::connect(actionSmooth, SIGNAL(triggered()), MainWindow, SLOT(smooth()));
         QObject::connect(actionNegative, SIGNAL(triggered()), MainWindow, SLOT(negative()));
+        QObject::connect(actionCustom, SIGNAL(triggered()), MainWindow, SLOT(showCustomDialog()));
+        QObject::connect(actionEqualize, SIGNAL(triggered()), MainWindow, SLOT(equalizeHistogram()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -310,7 +312,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "KFiltre", 0, QApplication::UnicodeUTF8));
         actionOpen->setText(QApplication::translate("MainWindow", "Open...", 0, QApplication::UnicodeUTF8));
         actionOpen->setIconText(QApplication::translate("MainWindow", "Open", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
@@ -334,7 +336,6 @@ public:
         actionResize->setText(QApplication::translate("MainWindow", "Resize...", 0, QApplication::UnicodeUTF8));
         actionRGB->setText(QApplication::translate("MainWindow", "RGB", 0, QApplication::UnicodeUTF8));
         actionRGB->setShortcut(QApplication::translate("MainWindow", "Ctrl+H", 0, QApplication::UnicodeUTF8));
-        actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
         actionNormalize->setText(QApplication::translate("MainWindow", "Normalize", 0, QApplication::UnicodeUTF8));
         actionCustom->setText(QApplication::translate("MainWindow", "Custom...", 0, QApplication::UnicodeUTF8));
         actionAbout_us->setText(QApplication::translate("MainWindow", "About us", 0, QApplication::UnicodeUTF8));
@@ -365,6 +366,7 @@ public:
         actionHorizontal_Resize->setShortcut(QApplication::translate("MainWindow", "H", 0, QApplication::UnicodeUTF8));
         actionNegative->setText(QApplication::translate("MainWindow", "Negative", 0, QApplication::UnicodeUTF8));
         actionSmooth->setText(QApplication::translate("MainWindow", "Smooth", 0, QApplication::UnicodeUTF8));
+        actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));
