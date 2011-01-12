@@ -116,7 +116,7 @@ void KImage::setFilename(QString filename)
 
 KImage* KImage::fusion(KImage* image, int factor)
 {
-    KImage* fusionnedImage = this->copy();
+    KImage* fusionnedImage = new KImage(this->width, this->height, this->filename);
     fusionnedImage->isEnergyDirty = true;
 
     KImage *image2 = image->resize(fusionnedImage->width, fusionnedImage->height);
@@ -200,7 +200,7 @@ KImage* KImage::applyNegative()
 
 KImage* KImage::applyNegative(int x1, int y1, int x2, int y2)
 {
-    KImage *negative = this->copy();
+    KImage *negative = new KImage(this->width, this->height, this->filename);
     negative->isEnergyDirty = true;
 
     for (int i = x1; i < x2; i++)
@@ -286,6 +286,38 @@ KImage* KImage::rotateCounterClockwise()
     return rotatedImage;
 }
 
+KImage* KImage::verticalMirror()
+{
+    KImage *inversedImage = new KImage(this->width, this->height, this->filename);
+    inversedImage->isEnergyDirty = true;
+
+    for (int i = 0; i < inversedImage->width; i++)
+    {
+        for (int j = 0; j < inversedImage->height; j++)
+        {
+            inversedImage->matrix[i][j] = this->matrix[this->width - 1 - i][j].copy();
+        }
+    }
+
+    return inversedImage;
+}
+
+KImage* KImage::horizontalMirror()
+{
+    KImage *inversedImage = new KImage(this->width, this->height, this->filename);
+    inversedImage->isEnergyDirty = true;
+
+    for (int i = 0; i < inversedImage->width; i++)
+    {
+        for (int j = 0; j < inversedImage->height; j++)
+        {
+            inversedImage->matrix[i][j] = this->matrix[i][this->height - 1 - j].copy();
+        }
+    }
+
+    return inversedImage;
+}
+
 KImage* KImage::applyFilter(KFiltre *filtre, bool setDirty)
 {
     return this->applyFilter(filtre, 0, 0, this->width, this->height, setDirty);
@@ -293,7 +325,7 @@ KImage* KImage::applyFilter(KFiltre *filtre, bool setDirty)
 
 KImage* KImage::applyFilter(KFiltre *filtre, int x1, int y1, int x2, int y2, bool setDirty)
 {
-    KImage* filteredImage = this->copy();
+    KImage* filteredImage = new KImage(this->width, this->height, this->filename);
     if (setDirty) filteredImage->isEnergyDirty = true;
 
     int pixelsToSkip = (filtre->taille - 1) / 2; // Bordure où le masque n'est pas applicable
@@ -343,7 +375,7 @@ KImage* KImage::applyMedianSmoothing()
 
 KImage* KImage::applyMedianSmoothing(int x1, int y1, int x2, int y2)
 {
-    KImage *smoothedImage = this->copy();
+    KImage *smoothedImage = new KImage(this->width, this->height, this->filename);
     smoothedImage->isEnergyDirty = true;
 
     if (x1 == 0) x1 = 1;

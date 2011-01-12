@@ -102,6 +102,8 @@
     <addaction name="separator"/>
     <addaction name="actionRotate_90"/>
     <addaction name="actionRotate_270"/>
+    <addaction name="actionVertical_Mirror"/>
+    <addaction name="actionHorizontal_Mirror"/>
    </widget>
    <widget class="QMenu" name="menuHistogram">
     <property name="title">
@@ -192,6 +194,8 @@
    <addaction name="separator"/>
    <addaction name="actionRotate_270"/>
    <addaction name="actionRotate_90"/>
+   <addaction name="actionHorizontal_Mirror"/>
+   <addaction name="actionVertical_Mirror"/>
   </widget>
   <action name="actionOpen">
    <property name="checkable">
@@ -448,6 +452,24 @@
    </property>
    <property name="text">
     <string>Rotate 270°</string>
+   </property>
+  </action>
+  <action name="actionVertical_Mirror">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/mirror.png</normaloff>icons/actions/mirror.png</iconset>
+   </property>
+   <property name="text">
+    <string>Vertical Mirror</string>
+   </property>
+  </action>
+  <action name="actionHorizontal_Mirror">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/mirror2.png</normaloff>icons/actions/mirror2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Horizontal Mirror</string>
    </property>
   </action>
  </widget>
@@ -902,6 +924,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionVertical_Mirror</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>verticalMirror()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHorizontal_Mirror</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>horizontalMirror()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open()</slot>
@@ -932,5 +986,7 @@
   <slot>equalizeHistogram()</slot>
   <slot>rotateClockwise()</slot>
   <slot>rotateCounterClockwise()</slot>
+  <slot>verticalMirror()</slot>
+  <slot>horizontalMirror()</slot>
  </slots>
 </ui>

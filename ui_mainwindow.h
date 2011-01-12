@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed 12. Jan 21:07:06 2011
+** Created: Wed 12. Jan 22:54:45 2011
 **      by: Qt User Interface Compiler version 4.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -59,6 +59,8 @@ public:
     QAction *actionEqualize;
     QAction *actionRotate_90;
     QAction *actionRotate_270;
+    QAction *actionVertical_Mirror;
+    QAction *actionHorizontal_Mirror;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -180,6 +182,16 @@ public:
         QIcon icon9;
         icon9.addFile(QString::fromUtf8("icons/actions/go-jump2.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRotate_270->setIcon(icon9);
+        actionVertical_Mirror = new QAction(MainWindow);
+        actionVertical_Mirror->setObjectName(QString::fromUtf8("actionVertical_Mirror"));
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8("icons/actions/mirror.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionVertical_Mirror->setIcon(icon10);
+        actionHorizontal_Mirror = new QAction(MainWindow);
+        actionHorizontal_Mirror->setObjectName(QString::fromUtf8("actionHorizontal_Mirror"));
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8("icons/actions/mirror2.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHorizontal_Mirror->setIcon(icon11);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -258,6 +270,8 @@ public:
         menuImage->addSeparator();
         menuImage->addAction(actionRotate_90);
         menuImage->addAction(actionRotate_270);
+        menuImage->addAction(actionVertical_Mirror);
+        menuImage->addAction(actionHorizontal_Mirror);
         menuHistogram->addAction(actionRGB);
         menuHistogram->addAction(actionYUV);
         menuHistogram->addAction(actionEqualize);
@@ -292,6 +306,8 @@ public:
         toolBar->addSeparator();
         toolBar->addAction(actionRotate_270);
         toolBar->addAction(actionRotate_90);
+        toolBar->addAction(actionHorizontal_Mirror);
+        toolBar->addAction(actionVertical_Mirror);
 
         retranslateUi(MainWindow);
         QObject::connect(actionClose, SIGNAL(triggered()), MainWindow, SLOT(close()));
@@ -322,6 +338,8 @@ public:
         QObject::connect(actionEqualize, SIGNAL(triggered()), MainWindow, SLOT(equalizeHistogram()));
         QObject::connect(actionRotate_90, SIGNAL(triggered()), MainWindow, SLOT(rotateClockwise()));
         QObject::connect(actionRotate_270, SIGNAL(triggered()), MainWindow, SLOT(rotateCounterClockwise()));
+        QObject::connect(actionVertical_Mirror, SIGNAL(triggered()), MainWindow, SLOT(verticalMirror()));
+        QObject::connect(actionHorizontal_Mirror, SIGNAL(triggered()), MainWindow, SLOT(horizontalMirror()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -388,6 +406,8 @@ public:
         actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
         actionRotate_90->setText(QApplication::translate("MainWindow", "Rotate 90\302\260", 0, QApplication::UnicodeUTF8));
         actionRotate_270->setText(QApplication::translate("MainWindow", "Rotate 270\302\260", 0, QApplication::UnicodeUTF8));
+        actionVertical_Mirror->setText(QApplication::translate("MainWindow", "Vertical Mirror", 0, QApplication::UnicodeUTF8));
+        actionHorizontal_Mirror->setText(QApplication::translate("MainWindow", "Horizontal Mirror", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));

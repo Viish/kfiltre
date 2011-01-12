@@ -76,6 +76,8 @@ public slots:
         void negative();
         void rotateClockwise();
         void rotateCounterClockwise();
+        void verticalMirror();
+        void horizontalMirror();
 
 protected:
     void changeEvent(QEvent *e);
