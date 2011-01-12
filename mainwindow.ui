@@ -76,7 +76,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -99,6 +99,9 @@
     <addaction name="actionResize"/>
     <addaction name="actionVertical_Resize"/>
     <addaction name="actionHorizontal_Resize"/>
+    <addaction name="separator"/>
+    <addaction name="actionRotate_90"/>
+    <addaction name="actionRotate_270"/>
    </widget>
    <widget class="QMenu" name="menuHistogram">
     <property name="title">
@@ -186,6 +189,9 @@
    <addaction name="actionNone"/>
    <addaction name="actionRectangle"/>
    <addaction name="actionCrop"/>
+   <addaction name="separator"/>
+   <addaction name="actionRotate_270"/>
+   <addaction name="actionRotate_90"/>
   </widget>
   <action name="actionOpen">
    <property name="checkable">
@@ -294,9 +300,6 @@
   <action name="actionAbout_us">
    <property name="text">
     <string>About us</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::AboutRole</enum>
    </property>
   </action>
   <action name="actionSave_as">
@@ -427,6 +430,24 @@
   <action name="actionEqualize">
    <property name="text">
     <string>Equalize</string>
+   </property>
+  </action>
+  <action name="actionRotate_90">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/go-jump.png</normaloff>icons/actions/go-jump.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate 90°</string>
+   </property>
+  </action>
+  <action name="actionRotate_270">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/actions/go-jump2.png</normaloff>icons/actions/go-jump2.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rotate 270°</string>
    </property>
   </action>
  </widget>
@@ -849,6 +870,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionRotate_90</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rotateClockwise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRotate_270</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rotateCounterClockwise()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open()</slot>
@@ -877,5 +930,7 @@
   <slot>negative()</slot>
   <slot>showCustomDialog()</slot>
   <slot>equalizeHistogram()</slot>
+  <slot>rotateClockwise()</slot>
+  <slot>rotateCounterClockwise()</slot>
  </slots>
 </ui>

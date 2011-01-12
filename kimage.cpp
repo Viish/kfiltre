@@ -171,12 +171,12 @@ KImage* KImage::resize(int width, int height, bool scale)
     return resizedImage;
 }
 
-KImage* KImage::toGrayScale()
+KImage* KImage::toGrayScale(int x1, int y1, int x2, int y2)
 {
     KImage* grayScale = this->copy();
-    for (int i = 0; i < grayScale->width; ++i)
+    for (int i = x1; i < x2; ++i)
     {
-        for (int j = 0; j < grayScale->height; ++j)
+        for (int j = y1; j < y2; ++j)
         {
             grayScale->matrix[i][j].toGray();
         }
@@ -188,14 +188,24 @@ KImage* KImage::toGrayScale()
     return grayScale;
 }
 
+KImage* KImage::toGrayScale()
+{
+    return this->toGrayScale(0, 0, this->width, this->height);
+}
+
 KImage* KImage::applyNegative()
+{
+    return this->applyNegative(0, 0, this->width, this->height);
+}
+
+KImage* KImage::applyNegative(int x1, int y1, int x2, int y2)
 {
     KImage *negative = this->copy();
     negative->isEnergyDirty = true;
 
-    for (int i = 0; i < negative->width; i++)
+    for (int i = x1; i < x2; i++)
     {
-        for (int j = 0; j < negative->height; j++)
+        for (int j = y1; j < y2; j++)
         {
             negative->matrix[i][j].red = 255 - this->matrix[i][j].red;
             negative->matrix[i][j].green = 255 - this->matrix[i][j].green;
@@ -244,16 +254,57 @@ KRGB** KImage::getPixels(int i, int j, int taille)
     return pixels;
 }
 
+KImage* KImage::rotateClockwise()
+{
+    KImage *rotatedImage = new KImage(this->height, this->width, this->filename);
+    rotatedImage->isEnergyDirty = true;
+
+    for (int i = 0; i < rotatedImage->width; i++)
+    {
+        for (int j = 0; j < rotatedImage->height; j++)
+        {
+            rotatedImage->matrix[i][j] = this->matrix[j][this->height - 1 - i].copy();
+        }
+    }
+
+    return rotatedImage;
+}
+
+KImage* KImage::rotateCounterClockwise()
+{
+    KImage *rotatedImage = new KImage(this->height, this->width, this->filename);
+    rotatedImage->isEnergyDirty = true;
+
+    for (int i = 0; i < rotatedImage->width; i++)
+    {
+        for (int j = 0; j < rotatedImage->height; j++)
+        {
+            rotatedImage->matrix[i][j] = this->matrix[this->width - 1 - j][i].copy();
+        }
+    }
+
+    return rotatedImage;
+}
+
 KImage* KImage::applyFilter(KFiltre *filtre, bool setDirty)
+{
+    return this->applyFilter(filtre, 0, 0, this->width, this->height, setDirty);
+}
+
+KImage* KImage::applyFilter(KFiltre *filtre, int x1, int y1, int x2, int y2, bool setDirty)
 {
     KImage* filteredImage = this->copy();
     if (setDirty) filteredImage->isEnergyDirty = true;
 
     int pixelsToSkip = (filtre->taille - 1) / 2; // Bordure où le masque n'est pas applicable
+    if (x1 < pixelsToSkip) x1 = pixelsToSkip;
+    if (x2 > filteredImage->width - pixelsToSkip) x2 = filteredImage->width - pixelsToSkip;
+    if (y1 < pixelsToSkip) y1 = pixelsToSkip;
+    if (y2 > filteredImage->height - pixelsToSkip) y2 = filteredImage->height - pixelsToSkip;
 
-    for (int i = pixelsToSkip; i < filteredImage->width - pixelsToSkip; i++)
+    for (int i = x1; i < x2; i++)
     {
-        for (int j = pixelsToSkip; j < filteredImage->height - pixelsToSkip; j++)
+        for (int j = y1; j < y2; j++)
         {
             KRGB** pixels = this->getPixels(i, j, filtre->taille);
             int red, green, blue;
@@ -287,12 +338,22 @@ KImage* KImage::applyFilter(KFiltre *filtre, bool setDirty)
 
 KImage* KImage::applyMedianSmoothing()
 {
+    return this->applyMedianSmoothing(0, 0, this->width, this->height);
+}
+
+KImage* KImage::applyMedianSmoothing(int x1, int y1, int x2, int y2)
+{
     KImage *smoothedImage = this->copy();
     smoothedImage->isEnergyDirty = true;
 
-    for (int i = 1; i < smoothedImage->width - 1; i++)
+    if (x1 == 0) x1 = 1;
+    if (y1 == 0) y1 = 1;
+    if (x2 == smoothedImage->width) x2 = smoothedImage->width - 1;
+    if (y2 == smoothedImage->height) y2 = smoothedImage->height - 1;
+
+    for (int i = x1; i < x2; i++)
     {
-        for (int j = 1; j < smoothedImage->height - 1; j++)
+        for (int j = y1; j < y2; j++)
         {
             KRGB** pixels = this->getPixels(i, j, 3);
             int red[9], green[9], blue[9];

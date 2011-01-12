@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed Jan 12 17:06:19 2011
-**      by: Qt User Interface Compiler version 4.6.2
+** Created: Wed 12. Jan 21:07:06 2011
+**      by: Qt User Interface Compiler version 4.7.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -57,6 +57,8 @@ public:
     QAction *actionNegative;
     QAction *actionSmooth;
     QAction *actionEqualize;
+    QAction *actionRotate_90;
+    QAction *actionRotate_270;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -121,7 +123,6 @@ public:
         actionCustom->setObjectName(QString::fromUtf8("actionCustom"));
         actionAbout_us = new QAction(MainWindow);
         actionAbout_us->setObjectName(QString::fromUtf8("actionAbout_us"));
-        actionAbout_us->setMenuRole(QAction::AboutRole);
         actionSave_as = new QAction(MainWindow);
         actionSave_as->setObjectName(QString::fromUtf8("actionSave_as"));
         actionYUV = new QAction(MainWindow);
@@ -169,6 +170,16 @@ public:
         actionSmooth->setObjectName(QString::fromUtf8("actionSmooth"));
         actionEqualize = new QAction(MainWindow);
         actionEqualize->setObjectName(QString::fromUtf8("actionEqualize"));
+        actionRotate_90 = new QAction(MainWindow);
+        actionRotate_90->setObjectName(QString::fromUtf8("actionRotate_90"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8("icons/actions/go-jump.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRotate_90->setIcon(icon8);
+        actionRotate_270 = new QAction(MainWindow);
+        actionRotate_270->setObjectName(QString::fromUtf8("actionRotate_270"));
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8("icons/actions/go-jump2.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRotate_270->setIcon(icon9);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -197,7 +208,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 25));
+        menuBar->setGeometry(QRect(0, 0, 800, 21));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuImage = new QMenu(menuBar);
@@ -244,6 +255,9 @@ public:
         menuImage->addAction(actionResize);
         menuImage->addAction(actionVertical_Resize);
         menuImage->addAction(actionHorizontal_Resize);
+        menuImage->addSeparator();
+        menuImage->addAction(actionRotate_90);
+        menuImage->addAction(actionRotate_270);
         menuHistogram->addAction(actionRGB);
         menuHistogram->addAction(actionYUV);
         menuHistogram->addAction(actionEqualize);
@@ -275,6 +289,9 @@ public:
         toolBar->addAction(actionNone);
         toolBar->addAction(actionRectangle);
         toolBar->addAction(actionCrop);
+        toolBar->addSeparator();
+        toolBar->addAction(actionRotate_270);
+        toolBar->addAction(actionRotate_90);
 
         retranslateUi(MainWindow);
         QObject::connect(actionClose, SIGNAL(triggered()), MainWindow, SLOT(close()));
@@ -303,6 +320,8 @@ public:
         QObject::connect(actionNegative, SIGNAL(triggered()), MainWindow, SLOT(negative()));
         QObject::connect(actionCustom, SIGNAL(triggered()), MainWindow, SLOT(showCustomDialog()));
         QObject::connect(actionEqualize, SIGNAL(triggered()), MainWindow, SLOT(equalizeHistogram()));
+        QObject::connect(actionRotate_90, SIGNAL(triggered()), MainWindow, SLOT(rotateClockwise()));
+        QObject::connect(actionRotate_270, SIGNAL(triggered()), MainWindow, SLOT(rotateCounterClockwise()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -367,6 +386,8 @@ public:
         actionNegative->setText(QApplication::translate("MainWindow", "Negative", 0, QApplication::UnicodeUTF8));
         actionSmooth->setText(QApplication::translate("MainWindow", "Smooth", 0, QApplication::UnicodeUTF8));
         actionEqualize->setText(QApplication::translate("MainWindow", "Equalize", 0, QApplication::UnicodeUTF8));
+        actionRotate_90->setText(QApplication::translate("MainWindow", "Rotate 90\302\260", 0, QApplication::UnicodeUTF8));
+        actionRotate_270->setText(QApplication::translate("MainWindow", "Rotate 270\302\260", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));

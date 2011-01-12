@@ -70,17 +70,26 @@ void MainWindow::saveAs()
 
 void MainWindow::toGray()
 {
-    this->refresh(this->getCurrentImage()->toGrayScale());
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->toGrayScale(x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->toGrayScale());
 }
 
 void MainWindow::smooth()
 {
-    this->refresh(this->getCurrentImage()->applyMedianSmoothing());
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyMedianSmoothing(x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyMedianSmoothing());
 }
 
 void MainWindow::negative()
 {
-    this->refresh(getCurrentImage()->applyNegative());
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyNegative(x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyNegative());
 }
 
 void MainWindow::resize(int width, int height, bool smart)
@@ -88,7 +97,7 @@ void MainWindow::resize(int width, int height, bool smart)
     if (smart)
         this->smartResize(width, height);
     else
-        this->refresh(getCurrentImage()->resize(width, height));
+        this->refresh(this->getCurrentImage()->resize(width, height));
 }
 
 void MainWindow::smartResize(int width, int height)
@@ -104,6 +113,16 @@ void MainWindow::smartResizeH()
 void MainWindow::smartResizeV()
 {
     this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width - 1, getCurrentImage()->height));
+}
+
+void MainWindow::rotateClockwise()
+{
+    this->refresh(this->getCurrentImage()->rotateClockwise());
+}
+
+void MainWindow::rotateCounterClockwise()
+{
+    this->refresh(this->getCurrentImage()->rotateCounterClockwise());
 }
 
 void MainWindow::showResizeDialog()
@@ -127,7 +146,11 @@ void MainWindow::validateFusion(KImage *fusionImage, int factor)
 void MainWindow::applyBlur()
 {
     KFiltre *filterBlur = new KFiltre(BLUR);
-    this->refresh(this->getCurrentImage()->applyFilter(filterBlur));
+
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterBlur, x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyFilter(filterBlur));
 }
 
 void MainWindow::applyEdgeEnhancement()
@@ -143,13 +166,20 @@ void MainWindow::applyEdgeEnhancement()
 void MainWindow::applyEdgeDetection()
 {
     KFiltre *filterEdge = new KFiltre(EDGE);
-    this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
+
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterEdge, x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
 }
 
 void MainWindow::applyPaintEffect()
 {
-    KFiltre *filterEdge = new KFiltre(PAINT);
-    this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
+    KFiltre *filterPaint = new KFiltre(PAINT);
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterPaint, x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyFilter(filterPaint));
 }
 
 void MainWindow::showCustomDialog()
@@ -162,7 +192,11 @@ void MainWindow::showCustomDialog()
 void MainWindow::applyCustomMatrix(int** matrix, int size, int div)
 {
     KFiltre *customFilter = new KFiltre(matrix, size, div);
-    this->refresh(this->getCurrentImage()->applyFilter(customFilter));
+
+    if (this->x1 != this->x2 && this->y1 != this->y2)
+        this->refresh(this->getCurrentImage()->applyFilter(customFilter, x1, y1, x2, y2));
+    else
+        this->refresh(this->getCurrentImage()->applyFilter(customFilter));
 }
 
 void MainWindow::undo()
@@ -208,8 +242,8 @@ void MainWindow::showYUVHistogram()
 void MainWindow::refresh(KImage* image)
 {
     std::cerr << "void MainWindow::refresh(KImage* image)" << std::endl;
-    this->getCurrentTab()->refresh(image);
     this->enableUndo();
+    this->getCurrentTab()->refresh(image);
     enableSave();
 }
 

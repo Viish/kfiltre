@@ -74,6 +74,8 @@ public slots:
         void smartResizeV();
         void smooth();
         void negative();
+        void rotateClockwise();
+        void rotateCounterClockwise();
 
 protected:
     void changeEvent(QEvent *e);

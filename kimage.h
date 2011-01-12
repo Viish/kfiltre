@@ -56,16 +56,22 @@ public:
     QString getFilename();
     void setFilename(QString);
     KImage* toGrayScale();
+    KImage* toGrayScale(int, int, int, int);
     KImage* copy();
     KImage* getPrevious();
     KImage* getNext();
+    KImage* rotateClockwise();
+    KImage* rotateCounterClockwise();
     KImage* applyFilter(KFiltre *, bool setDirty = true);
+    KImage* applyFilter(KFiltre *, int, int, int, int, bool setDirty = true);
     KImage* resize(int, int, bool scale = false);
     KImage* fusion(KImage* image, int factor);
     KImage* applyNegative();
+    KImage* applyNegative(int, int, int, int);
     KImage* applyMedianSmoothing();
-    void sortArray(int*);
+    KImage* applyMedianSmoothing(int, int, int, int);
 
+    void sortArray(int*);
     void setNext(KImage*);
     void removePrevious();
     void removeNext();
