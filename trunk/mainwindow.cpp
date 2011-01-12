@@ -125,6 +125,16 @@ void MainWindow::rotateCounterClockwise()
     this->refresh(this->getCurrentImage()->rotateCounterClockwise());
 }
 
+void MainWindow::horizontalMirror()
+{
+    this->refresh(this->getCurrentImage()->horizontalMirror());
+}
+
+void MainWindow::verticalMirror()
+{
+    this->refresh(this->getCurrentImage()->verticalMirror());
+}
+
 void MainWindow::showResizeDialog()
 {
     KResizeDialog *resizeDialog = new KResizeDialog(this);

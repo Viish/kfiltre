@@ -70,6 +70,8 @@ public:
     KImage* applyNegative(int, int, int, int);
     KImage* applyMedianSmoothing();
     KImage* applyMedianSmoothing(int, int, int, int);
+    KImage* verticalMirror();
+    KImage* horizontalMirror();
 
     void sortArray(int*);
     void setNext(KImage*);
