@@ -1,62 +1,76 @@
+#include <iostream>
+
 #include "kfusion.h"
 #include "ui_kfusion.h"
 #include "mainwindow.h"
 
 KFusion::KFusion(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::KFusion),
-    factor(50),
-    imageB(NULL)
+        QDialog(parent),
+        ui(NULL),
+        scene(NULL),
+        main((MainWindow*)parent),
+        source(NULL),
+        target(NULL),
+        targetResized(NULL),
+        preview(NULL),
+        factor(50)
 {
-    ui->setupUi(this);
-    main = (MainWindow*) parent;
-    imageA = main->getCurrentImage()->resize(350, 200, false);
-    this->preview = imageA;
+    this->ui = new Ui::KFusion;
+    this->ui->setupUi(this);
+
+    this->source = main->getCurrentImage()->resize(this->width(), this->height(), true);
+    //this->targetResized = new KImage(imageA->width, imageA->height);
+    this->preview = this->source->copy();
+
     this->scene = new QGraphicsScene(this);
-    scene->addPixmap(QPixmap::fromImage(preview->toQImage()));
-    ui->graphicsView->setScene(scene);
+    this->scene->addPixmap(QPixmap::fromImage(preview->toQImage()));
+
+    this->ui->graphicsView->setScene(scene);
+
+    std::cerr << "Size :: " << this->width() << "  " << this->height() << std::endl;
 }
 
 KFusion::~KFusion()
 {
-    delete ui;
-    delete imageA;
-    delete imageB;
-    delete preview;
+    delete this->preview;
+    delete this->targetResized;
+    delete this->target;
+    delete this->source;
+    delete this->ui;
 }
 
 void KFusion::validate()
 {
-    main->validateFusion(imageA->fusion(imageB, factor), factor);
+    this->main->validateFusion(this->target, factor);
     this->close();
 }
 
 void KFusion::factorChanged(int value)
 {
-    factor = value;
-    preview = imageA->fusion(imageB, factor);
-    refresh(preview);
+    this->factor = value;
+    this->refresh();
 }
 
 void KFusion::browse()
 {
-    if (this->imageB != NULL) delete this->imageB;
     QString filename = QFileDialog::getOpenFileName(this, "Open a file", QString(), "Images (*.png *.gif *.jpg *.jpeg *.pnm)");
     if(filename != NULL)
     {
-        this->imageB = new KImage(filename);
-        preview = imageA->fusion(imageB, factor);
-        refresh(preview);
-        ui->horizontalSlider->setEnabled(true);
+        delete this->target;
+        delete this->targetResized;
+
+        //this->target->setFilename(filename);
+        //this->target->reload();
+        this->target = new KImage(filename);
+        this->targetResized = this->target->resize(source->width, source->height);
+        this->refresh();
+        this->ui->horizontalSlider->setEnabled(true);
     }
 }
 
-void KFusion::refresh(KImage *newImage)
+void KFusion::refresh()
 {
-    this->preview = newImage;
-    delete this->scene;
-    this->scene = new QGraphicsScene(this);
-    scene->addPixmap(QPixmap::fromImage(preview->toQImage()));
-    ui->graphicsView->setScene(scene);
-//    this->graphicsView->show();
+    this->source->fusion(*this->targetResized, *this->preview, this->factor);
+    this->scene->clear();
+    this->scene->addPixmap(QPixmap::fromImage(preview->toQImage()));
 }

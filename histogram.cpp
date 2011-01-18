@@ -1,8 +1,7 @@
 #include <QPainter>
-#include <iostream>
 #include <QDesktopWidget>
+
 #include "histogram.h"
-#include <iostream>
 
 #define VERTICAL_MARGIN 2
 #define HORIZONTAL_MARGIN 2
@@ -27,17 +26,16 @@ void Histogram::createRGB(KImage *image)
     {
         for (int j = 0; j < image->height; ++j)
         {
-            KRGB *pixel;
-            pixel = &(image->matrix[i][j]);
+            Pixel pixel = image->getPixel(i,j);
 
-            if ((pixel->red + pixel->green + pixel->blue) / 3 < min)
-                min = pixel->red;
-            if ((pixel->red + pixel->green + pixel->blue) / 3  > max)
-                max = pixel->red;
+            if ((pixel.red + pixel.green + pixel.blue) / 3 < min)
+                min = pixel.red;
+            if ((pixel.red + pixel.green + pixel.blue) / 3  > max)
+                max = pixel.red;
 
-            this->red[pixel->red]++; if (this->red[pixel->red] > this->MAX_R) { this->MAX_R = this->red[pixel->red]; }
-            this->green[pixel->green]++; if (this->green[pixel->green] > this->MAX_G) { this->MAX_G = this->green[pixel->green]; }
-            this->blue[pixel->blue]++; if (this->blue[pixel->blue] > this->MAX_B) { this->MAX_B = this->blue[pixel->blue]; }
+            this->red[pixel.red]++; if (this->red[pixel.red] > this->MAX_R) { this->MAX_R = this->red[pixel.red]; }
+            this->green[pixel.green]++; if (this->green[pixel.green] > this->MAX_G) { this->MAX_G = this->green[pixel.green]; }
+            this->blue[pixel.blue]++; if (this->blue[pixel.blue] > this->MAX_B) { this->MAX_B = this->blue[pixel.blue]; }
         }
     }
 
@@ -75,12 +73,11 @@ void Histogram::createYUV(KImage *image)
     {
         for (int j = 0; j < image->height; ++j)
         {
-            KRGB *pixel;
-            pixel = image->matrix[i][j].copyToYUV();
+            Pixel pixel = image->getYUVPixel(i,j);
 
-            this->y[pixel->red]++; if (this->y[pixel->red] > this->MAX_Y) { this->MAX_Y = this->y[pixel->red]; }
-            this->u[pixel->green]++; if (this->u[pixel->green] > this->MAX_U) { this->MAX_U = this->u[pixel->green]; }
-            this->v[pixel->blue]++; if (this->v[pixel->blue] > this->MAX_V) { this->MAX_V = this->v[pixel->blue]; }
+            this->y[pixel.red]++; if (this->y[pixel.red] > this->MAX_Y) { this->MAX_Y = this->y[pixel.red]; }
+            this->u[pixel.green]++; if (this->u[pixel.green] > this->MAX_U) { this->MAX_U = this->u[pixel.green]; }
+            this->v[pixel.blue]++; if (this->v[pixel.blue] > this->MAX_V) { this->MAX_V = this->v[pixel.blue]; }
         }
     }
 
@@ -99,7 +96,7 @@ void Histogram::createYUV(KImage *image)
 
 KImage* Histogram::normalize()
 {
-    KImage *normalizedImage = image->copy();
+    KImage *normalizedImage = new KImage(image->width, image->height, image->getFilename());
 
     for (int i = 0; i < image->width; i++)
     {
@@ -108,6 +105,7 @@ KImage* Histogram::normalize()
             normalizedImage->matrix[i][j].red = normalize(image->matrix[i][j].red);
             normalizedImage->matrix[i][j].green = normalize(image->matrix[i][j].green);
             normalizedImage->matrix[i][j].blue = normalize(image->matrix[i][j].blue);
+            normalizedImage->matrix[i][j].alpha = image->matrix[i][j].alpha;
         }
     }
 
@@ -121,7 +119,7 @@ int Histogram::normalize(int v)
 
 KImage* Histogram::equalize()
 {
-    KImage *equalizedImage = image->copy();
+    KImage *equalizedImage = new KImage(image->width, image->height, image->getFilename());
 
     for (int i = 0; i < image->width; i++)
     {
@@ -130,6 +128,7 @@ KImage* Histogram::equalize()
             equalizedImage->matrix[i][j].red = equalize(redCumul[image->matrix[i][j].red]);
             equalizedImage->matrix[i][j].green = equalize(greenCumul[image->matrix[i][j].green]);
             equalizedImage->matrix[i][j].blue = equalize(blueCumul[image->matrix[i][j].blue]);
+            equalizedImage->matrix[i][j].alpha = image->matrix[i][j].alpha;
         }
     }
 
@@ -154,7 +153,6 @@ void Histogram::paintEvent(QPaintEvent *qpe)
         painter.setPen(Qt::black);
         for (int i = 0; i < 256; ++i)
         {
-            std::cout << y[i] << std::endl;
             painter.drawLine(HORIZONTAL_MARGIN + i * HORIZONTAL_SPACING, (MAX_Y) / VERTICAL_SCALE + VERTICAL_MARGIN, HORIZONTAL_MARGIN + i * HORIZONTAL_SPACING, (MAX_Y - y[i]) / VERTICAL_SCALE + VERTICAL_MARGIN);
         }
 

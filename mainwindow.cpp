@@ -7,17 +7,25 @@
 #include "kresizedialog.h"
 #include "kmatrixdialog.h"
 
+Path::Path(int x, int y, Path *next) : point(x,y), next(next)
+{
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(NULL),
+    damier(NULL),
+    tool(NONE)
 {
-    ui->setupUi(this);
-    setNullTool();
+    this->ui = new Ui::MainWindow();
+    this->ui->setupUi(this);
+    this->damier = new KImage("./icons/damier.png");
     this->disableActions();
 }
 
 MainWindow::~MainWindow()
 {
+    delete damier;
     delete ui;
 }
 
@@ -36,13 +44,17 @@ void MainWindow::changeEvent(QEvent *e)
 void MainWindow::open()
 {
     QStringList filenames = QFileDialog::getOpenFileNames(this, "Open a file", QString(), "Images (*.png *.gif *.jpg *.jpeg *.pnm)");
-    for(int i = 0; i < filenames.size(); ++i) {
-        this->newGraphicsViewTab(filenames[i]);
-    }
-    if (ui->tabWidget->count() > 0)
+
+    for(int i = 0; i < filenames.size(); ++i)
     {
-        this->enableActions();
+        this->newGraphicsViewTab(filenames[i]);
+        //this->getCurrentImage()->calculateEnergy();
     }
+
+    this->enableActions();
+
+    if (ui->tabWidget->count() > 1)
+        enableCloseTab();
 }
 
 void MainWindow::save()
@@ -70,39 +82,66 @@ void MainWindow::saveAs()
 
 void MainWindow::toGray()
 {
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->toGrayScale(x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->toGrayScale(this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->toGrayScale(x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->toGrayScale());
 }
 
 void MainWindow::smooth()
 {
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyMedianSmoothing(x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyMedianSmoothing(this->getCurrentTab()->getSelectionPath()));
+   else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyMedianSmoothing(x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyMedianSmoothing());
 }
 
 void MainWindow::negative()
 {
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyNegative(x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyNegative(this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyNegative(x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyNegative());
 }
 
-void MainWindow::resize(int width, int height, bool smart)
+void MainWindow::resize(int width, int height, bool smart, KResizeDialog *dialog)
 {
     if (smart)
-        this->smartResize(width, height);
+        this->smartResize(width, height, dialog);
     else
         this->refresh(this->getCurrentImage()->resize(width, height));
 }
 
-void MainWindow::smartResize(int width, int height)
+void MainWindow::smartResize(int width, int height, KResizeDialog *dialog)
 {
-    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(width, height));
+    this->refresh(this->getCurrentImage()->copy()->seamCarving(width, height, dialog));
 }
 
 void MainWindow::smartResizeH()
@@ -155,39 +194,88 @@ void MainWindow::validateFusion(KImage *fusionImage, int factor)
 
 void MainWindow::applyBlur()
 {
-    KFiltre *filterBlur = new KFiltre(BLUR);
+    KFiltre filterBlur(BLUR);
 
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyFilter(filterBlur, x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyFilter(filterBlur, this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterBlur, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyFilter(filterBlur));
 }
 
 void MainWindow::applyEdgeEnhancement()
 {
-    KFiltre *filterEdge = new KFiltre(EDGE_H);
-    KImage *temp = this->getCurrentImage()->applyFilter(filterEdge);
+    KImage *temp;
+    KFiltre filterEdgeH(EDGE_H);
+    KFiltre filterEdgeV(EDGE_V);
 
-    filterEdge = new KFiltre(EDGE_V);
-    this->refresh(temp->applyFilter(filterEdge));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+    {
+        temp = this->getCurrentImage()->applyFilter(filterEdgeH, this->getCurrentTab()->getSelectionPath());
+        this->refresh(temp->applyFilter(filterEdgeV, this->getCurrentTab()->getSelectionPath()));
+    }
+    else if (x1 != x2 && y1 != y2)
+    {
+        temp = this->getCurrentImage()->applyFilter(filterEdgeH, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape());
+        this->refresh(temp->applyFilter(filterEdgeV, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
+    }
+    else
+    {
+        temp = this->getCurrentImage()->applyFilter(filterEdgeH);
+        this->refresh(temp->applyFilter(filterEdgeV));
+    }
+
     delete temp;
 }
 
 void MainWindow::applyEdgeDetection()
 {
-    KFiltre *filterEdge = new KFiltre(EDGE);
+    KFiltre filterEdge(EDGE);
 
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyFilter(filterEdge, x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyFilter(filterEdge, this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterEdge, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyFilter(filterEdge));
 }
 
 void MainWindow::applyPaintEffect()
 {
-    KFiltre *filterPaint = new KFiltre(PAINT);
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyFilter(filterPaint, x1, y1, x2, y2));
+    KFiltre filterPaint(PAINT);
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyFilter(filterPaint, this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyFilter(filterPaint, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyFilter(filterPaint));
 }
@@ -201,10 +289,19 @@ void MainWindow::showCustomDialog()
 
 void MainWindow::applyCustomMatrix(int** matrix, int size, int div)
 {
-    KFiltre *customFilter = new KFiltre(matrix, size, div);
+    KFiltre customFilter(matrix, size, div);
 
-    if (this->x1 != this->x2 && this->y1 != this->y2)
-        this->refresh(this->getCurrentImage()->applyFilter(customFilter, x1, y1, x2, y2));
+    QRect selection = this->getCurrentTab()->getSelection();
+    int x1, x2, y1, y2;
+    x1 = selection.x();
+    x2 = selection.width();
+    y1 = selection.y();
+    y2 = selection.height();
+
+    if (this->getCurrentTab()->getSelectionPath() != NULL)
+        this->refresh(this->getCurrentImage()->applyFilter(customFilter, this->getCurrentTab()->getSelectionPath()));
+    else if (x1 != x2 && y1 != y2)
+        this->refresh(this->getCurrentImage()->applyFilter(customFilter, x1, y1, x2, y2, this->getCurrentTab()->getSelectionShape()));
     else
         this->refresh(this->getCurrentImage()->applyFilter(customFilter));
 }
@@ -251,7 +348,6 @@ void MainWindow::showYUVHistogram()
 
 void MainWindow::refresh(KImage* image)
 {
-    std::cerr << "void MainWindow::refresh(KImage* image)" << std::endl;
     this->enableUndo();
     this->getCurrentTab()->refresh(image);
     enableSave();
@@ -282,53 +378,71 @@ void MainWindow::displayPixelColor(int x, int y)
 {
     if (x < getCurrentImage()->width && y < getCurrentImage()->height)
     {
-        KRGB rgb = this->getCurrentImage()->matrix[x][y];
+        Pixel rgb = this->getCurrentImage()->getPixel(x,y);
         int red = rgb.red;
         int green = rgb.green;
         int blue = rgb.blue;
-        int energy = rgb.energy;
 
-        KRGB *yuv = this->getCurrentImage()->matrix[x][y].copyToYUV();
-        int y = yuv->red;
-        int u = yuv->green;
-        int v = yuv->blue;
-        delete yuv;
+        Pixel yuv = this->getCurrentImage()->getYUVPixel(x,y);
+        int y = yuv.red;
+        int u = yuv.green;
+        int v = yuv.blue;
 
-        char buffer[65];
-        sprintf(buffer, "RGB : %d, %d, %d   YUV : %d, %d, %d   Energy : %d", red, green, blue, y, u, v, energy);
-        ui->statusBar->showMessage(buffer);
+        QString s;
+        ui->statusBar->showMessage(s.sprintf("RGB : %d, %d, %d   YUV : %d, %d, %d", red, green, blue, y, u, v));
     }
 }
 
 void MainWindow::setSelectionTopLeftCorner(int x, int y)
 {
-    this->x1 = x;
-    this->y1 = y;
+    this->getCurrentTab()->setSelectionTopLeftCorner(x, y);
 }
 
-void MainWindow::setSelectionBottomRightCorner(int x, int y)
+void MainWindow::setSelectionBottomRightCorner(int x, int y, bool finished, bool keepRatio)
 {
-    this->x2 = x;
-    this->y2 = y;
+    this->getCurrentTab()->setSelectionBottomRightCorner(x, y, finished, keepRatio);
 
     enableCrop();
-    drawSelection();
 }
 
 void MainWindow::drawSelection()
 {
-    this->getCurrentTab()->drawRect(x1, y1, x2, y2);
-}
-
-QRect MainWindow::getSelection()
-{
-    return QRect(x1, y1, x2, y2);
+    this->getCurrentTab()->drawSelection();
 }
 
 void MainWindow::crop()
 {
-    std::cerr << "void MainWindow::crop()" << std::endl;
     int startingX, startingY, finishingX, finishingY;
+    int x1, x2, y1, y2;
+
+    if(this->getCurrentTab()->selectionShape == PATH)
+    {
+        Path *path = this->getCurrentTab()->getSelectionPath();
+        Point firstPoint, point;
+        firstPoint = path->point;
+        x1 = x2 = firstPoint.x;
+        y1 = y2 = firstPoint.y;
+        path = path->next;
+        point = path->point;
+        while((point.x != firstPoint.x) && (point.y != firstPoint.y))
+        {
+            if(point.x < x1) x1 = point.x;
+            if(point.x > x2) x2 = point.x;
+            if(point.y < y1) y1 = point.y;
+            if(point.y > y2) y2 = point.y;
+
+            path = path->next;
+            point = path->point;
+        }
+    }
+    else
+    {
+        QRect selection = this->getCurrentTab()->getSelection();
+        x1 = selection.x();
+        x2 = selection.width();
+        y1 = selection.y();
+        y2 = selection.height();
+    }
 
     if (x1 > x2) { startingX = x2; finishingX = x1; }
     else  { startingX = x1; finishingX = x2; }
@@ -344,7 +458,8 @@ void MainWindow::crop()
     {
         for (int j = 0; j < height; j++)
         {
-            croppedImage->matrix[i][j] = getCurrentImage()->matrix[i + startingX][j + startingY].copy();
+            if (this->getCurrentTab()->getSelectionShape() == RECTANGLE || (this->getCurrentTab()->getSelectionShape() == ELLIPSE && getCurrentImage()->isInsideEllipse(i + startingX, j + startingY, x1, y1, x2, y2)) || (this->getCurrentTab()->getSelectionShape() == PATH && getCurrentImage()->isInsidePath(i + startingX, j + startingY, this->getCurrentTab()->getSelectionPath())))
+                croppedImage->matrix[i][j] = getCurrentImage()->getPixel(i + startingX, j + startingY);
         }
     }
 
@@ -354,34 +469,53 @@ void MainWindow::crop()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index)" << std::endl;
     ui->tabWidget->removeTab(index);
 
-    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index) ui->tabWidget->count()" << std::endl;
-    if (ui->tabWidget->count() <= 0)
+    if (ui->tabWidget->count() > 1)
     {
-        std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index) this->disableActions();" << std::endl;
-        this->disableActions();
+        enableCloseTab();
     }
+    else
+    {
+        disableCloseTab();
+    }
+}
 
-    std::cerr << "void MainWindow::on_tabWidget_tabCloseRequested(int index)" << std::endl;
+void MainWindow::addToTempPath(int x, int y)
+{
+    this->getCurrentTab()->addToTempPath(x, y);
+}
+
+void MainWindow::addToPath(int x, int y)
+{
+    this->getCurrentTab()->addToPath(x, y);
+}
+
+void MainWindow::finishPath(int x, int y)
+{
+    this->getCurrentTab()->finishPath(x, y);
+    this->enableCrop();
+}
+
+void MainWindow::deletePath()
+{
+    this->getCurrentTab()->deletePath();
 }
 
 void MainWindow::selectAll()
 {
-    this->x1 = 0;
-    this->y1 = 0;
-    this->x2 = getCurrentImage()->width;
-    this->y2 = getCurrentImage()->height;
-
+    this->getCurrentTab()->selectAll();
     enableCrop();
-    drawSelection();
+}
+
+QRect MainWindow::getSelection()
+{
+    return this->getCurrentTab()->getSelection();
 }
 
 void MainWindow::cancelSelection()
 {
-    this->x1 = this->x2 = this->y1 = this->y2 = 0;
-    getCurrentTab()->hideSelection();
+    this->getCurrentTab()->cancelSelection();
     disableCrop();
 }
 
@@ -397,107 +531,12 @@ void MainWindow::resizeSelection()
 
 void MainWindow::moveSelection(int x, int y)
 {
-    if(x1+x >= 0 && x1+x <getCurrentImage()->width && x2+x >= 0 && x2+x <getCurrentImage()->width)
-    {
-        this->x1 += x;
-        this->x2 += x;
-    }
-    if(y1+y >= 0 && y1+y <getCurrentImage()->height && y2+y >= 0 && y2+y <getCurrentImage()->height)
-    {
-        this->y1 += y;
-        this->y2 += y;
-    }
-
-    drawSelection();
+    this->getCurrentTab()->moveSelection(x, y);
 }
 
 void MainWindow::resizeSelection(int i, SIDE cote)
 {
-    if(cote == LEFT)
-    {
-        if(x1 < x2)
-        {
-            if (x1 + i >= x2)
-                i = x2 - x1 - 1;
-            else if (x1 + i < 0)
-                i = -x1;
-
-            this->x1 += i;
-        }
-        else if(x2 < x1)
-        {
-            if (x2 + i >= x1)
-                i = x1 - x2 - 1;
-            else if (x2 + i < 0)
-                i = -x2;
-
-            this->x2 += i;
-        }
-    }
-    else if(cote == RIGHT)
-    {
-        if(x1 > x2)
-        {
-            if(x1 + i <= x2)
-                i = x2 - x1 + 1;
-            else if (x1 + i > getCurrentImage()->width)
-                i = getCurrentImage()->width - x1;
-
-            this->x1 += i;
-        }
-        else if(x2 > x1)
-        {
-            if (x2 + i <= x1)
-                i = x1 - x2 + 1;
-            else if (x2 + i > getCurrentImage()->width)
-                i = getCurrentImage()->width - x2;
-
-            this->x2 += i;
-        }
-    }
-    else if(cote == TOP)
-    {
-        if(y1 < y2)
-        {
-            if (y1 + i >= y2)
-                i = y2 - y1 - 1;
-            else if(y1 + i < 0)
-                i = -y1;
-
-            this->y1 += i;
-        }
-        else if (y2 < y1)
-        {
-            if (y2 + i >= y1)
-                i = y1 - y2 - 1;
-            else if(y2 + i < 0)
-                i = -y2;
-
-            this->y2 += i;
-        }
-    }
-    else if(cote == BOTTOM)
-    {
-        if(y1 > y2)
-        {
-            if(y1 + i <= y2)
-                i = y2 - y1 + 1;
-            else if (y1 + i > getCurrentImage()->height)
-                i = getCurrentImage()->height - y1;
-
-            this->y1 += i;
-        }
-        else if (y2 > y1)
-        {
-            if(y2 + i <= y1)
-                i = y1 - y2 + 1;
-            else if (y2 + i > getCurrentImage()->height)
-                i = getCurrentImage()->height - y2;
-
-            this->y2 += i;
-        }
-    }
-    drawSelection();
+    this->getCurrentTab()->resizeSelection(i, cote);
 }
 
 TOOL MainWindow::getTool()
@@ -505,9 +544,25 @@ TOOL MainWindow::getTool()
     return this->tool;
 }
 
+void MainWindow::setPathTool()
+{
+    this->getCurrentTab()->deletePath();
+    this->tool = PATH;
+    this->getCurrentTab()->selectionShape = PATH;
+}
+
 void MainWindow::setRectTool()
 {
+    this->getCurrentTab()->deletePath();
     this->tool = RECTANGLE;
+    this->getCurrentTab()->selectionShape = RECTANGLE;
+}
+
+void MainWindow::setEllipseTool()
+{
+    this->getCurrentTab()->deletePath();
+    this->tool = ELLIPSE;
+    this->getCurrentTab()->selectionShape = ELLIPSE;
 }
 
 void MainWindow::setNullTool()
@@ -536,6 +591,12 @@ void MainWindow::disableActions()
     ui->actionCustom->setEnabled(false);
     ui->actionVertical_Resize->setEnabled(false);
     ui->actionHorizontal_Resize->setEnabled(false);
+    ui->actionRotate_90->setEnabled(false);
+    ui->actionRotate_270->setEnabled(false);
+    ui->actionVertical_Mirror->setEnabled(false);
+    ui->actionHorizontal_Mirror->setEnabled(false);
+    ui->actionEqualize->setEnabled(false);
+    ui->actionEllipse->setEnabled(false);
     disableCrop();
     disableUndo();
     disableRedo();
@@ -563,6 +624,12 @@ void MainWindow::enableActions()
     ui->actionCustom->setEnabled(true);
     ui->actionVertical_Resize->setEnabled(true);
     ui->actionHorizontal_Resize->setEnabled(true);
+    ui->actionRotate_90->setEnabled(true);
+    ui->actionRotate_270->setEnabled(true);
+    ui->actionVertical_Mirror->setEnabled(true);
+    ui->actionHorizontal_Mirror->setEnabled(true);
+    ui->actionEqualize->setEnabled(true);
+    ui->actionEllipse->setEnabled(true);
 }
 
 void MainWindow::enableUndo()
@@ -597,6 +664,16 @@ void MainWindow::enableCrop()
 void MainWindow::disableCrop()
 {
     ui->actionCrop->setEnabled(false);
+}
+
+void MainWindow::enableCloseTab()
+{
+    ui->tabWidget->setTabsClosable(true);
+}
+
+void MainWindow::disableCloseTab()
+{
+    ui->tabWidget->setTabsClosable(false);
 }
 
 QString MainWindow::getCroppedFilename()

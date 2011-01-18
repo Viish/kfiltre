@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Wed 12. Jan 22:54:45 2011
-**      by: Qt User Interface Compiler version 4.7.1
+** Created: Tue Jan 18 12:09:47 2011
+**      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -61,6 +61,8 @@ public:
     QAction *actionRotate_270;
     QAction *actionVertical_Mirror;
     QAction *actionHorizontal_Mirror;
+    QAction *actionEllipse;
+    QAction *actionPath;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
@@ -93,7 +95,7 @@ public:
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         actionOpen->setCheckable(false);
         QIcon icon;
-        icon.addFile(QString::fromUtf8("icons/actions/document-open.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8("icons/document-open.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionOpen->setIcon(icon);
         actionOpen->setVisible(true);
         actionOpen->setMenuRole(QAction::TextHeuristicRole);
@@ -101,59 +103,80 @@ public:
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8("icons/devices/media-floppy.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8("icons/document-save.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionSave->setIcon(icon1);
         actionClose = new QAction(MainWindow);
         actionClose->setObjectName(QString::fromUtf8("actionClose"));
         actionCrop = new QAction(MainWindow);
         actionCrop->setObjectName(QString::fromUtf8("actionCrop"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8("icons/actions/edit-cut.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8("icons/transform-crop.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionCrop->setIcon(icon2);
         actionGrayscale = new QAction(MainWindow);
         actionGrayscale->setObjectName(QString::fromUtf8("actionGrayscale"));
         actionGrayscale->setChecked(false);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8("icons/layer-visible-off.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionGrayscale->setIcon(icon3);
         actionFusion = new QAction(MainWindow);
         actionFusion->setObjectName(QString::fromUtf8("actionFusion"));
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8("icons/insert-image.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionFusion->setIcon(icon4);
         actionResize = new QAction(MainWindow);
         actionResize->setObjectName(QString::fromUtf8("actionResize"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8("icons/transform-scale.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionResize->setIcon(icon5);
         actionRGB = new QAction(MainWindow);
         actionRGB->setObjectName(QString::fromUtf8("actionRGB"));
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8("icons/preferences-activities.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRGB->setIcon(icon6);
         actionNormalize = new QAction(MainWindow);
         actionNormalize->setObjectName(QString::fromUtf8("actionNormalize"));
         actionCustom = new QAction(MainWindow);
         actionCustom->setObjectName(QString::fromUtf8("actionCustom"));
         actionAbout_us = new QAction(MainWindow);
         actionAbout_us->setObjectName(QString::fromUtf8("actionAbout_us"));
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8("icons/help-about.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAbout_us->setIcon(icon7);
         actionSave_as = new QAction(MainWindow);
         actionSave_as->setObjectName(QString::fromUtf8("actionSave_as"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8("icons/document-save-as.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave_as->setIcon(icon8);
         actionYUV = new QAction(MainWindow);
         actionYUV->setObjectName(QString::fromUtf8("actionYUV"));
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8("icons/view-object-histogram-logarithmic.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionYUV->setIcon(icon9);
         actionSelect_all = new QAction(MainWindow);
         actionSelect_all->setObjectName(QString::fromUtf8("actionSelect_all"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8("icons/actions/view-fullscreen.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSelect_all->setIcon(icon3);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8("icons/select_all.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSelect_all->setIcon(icon10);
         actionNone = new QAction(MainWindow);
         actionNone->setObjectName(QString::fromUtf8("actionNone"));
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8("icons/actions/process-stop.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionNone->setIcon(icon4);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8("icons/dialog-cancel.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNone->setIcon(icon11);
         actionRectangle = new QAction(MainWindow);
         actionRectangle->setObjectName(QString::fromUtf8("actionRectangle"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8("icons/actions/media-playback-stop.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRectangle->setIcon(icon5);
+        QIcon icon12;
+        icon12.addFile(QString::fromUtf8("icons/draw-rectangle.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRectangle->setIcon(icon12);
         actionUndo = new QAction(MainWindow);
         actionUndo->setObjectName(QString::fromUtf8("actionUndo"));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8("icons/actions/edit-undo.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionUndo->setIcon(icon6);
+        QIcon icon13;
+        icon13.addFile(QString::fromUtf8("icons/edit-undo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionUndo->setIcon(icon13);
         actionRedo = new QAction(MainWindow);
         actionRedo->setObjectName(QString::fromUtf8("actionRedo"));
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8("icons/actions/edit-redo.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRedo->setIcon(icon7);
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8("icons/edit-redo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRedo->setIcon(icon14);
         actionBlur = new QAction(MainWindow);
         actionBlur->setObjectName(QString::fromUtf8("actionBlur"));
         actionEdge_Enhancement = new QAction(MainWindow);
@@ -174,24 +197,34 @@ public:
         actionEqualize->setObjectName(QString::fromUtf8("actionEqualize"));
         actionRotate_90 = new QAction(MainWindow);
         actionRotate_90->setObjectName(QString::fromUtf8("actionRotate_90"));
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8("icons/actions/go-jump.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRotate_90->setIcon(icon8);
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8("icons/object-rotate-right.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRotate_90->setIcon(icon15);
         actionRotate_270 = new QAction(MainWindow);
         actionRotate_270->setObjectName(QString::fromUtf8("actionRotate_270"));
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8("icons/actions/go-jump2.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionRotate_270->setIcon(icon9);
+        QIcon icon16;
+        icon16.addFile(QString::fromUtf8("icons/object-rotate-left.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRotate_270->setIcon(icon16);
         actionVertical_Mirror = new QAction(MainWindow);
         actionVertical_Mirror->setObjectName(QString::fromUtf8("actionVertical_Mirror"));
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8("icons/actions/mirror.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionVertical_Mirror->setIcon(icon10);
+        QIcon icon17;
+        icon17.addFile(QString::fromUtf8("icons/object-flip-horizontal.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionVertical_Mirror->setIcon(icon17);
         actionHorizontal_Mirror = new QAction(MainWindow);
         actionHorizontal_Mirror->setObjectName(QString::fromUtf8("actionHorizontal_Mirror"));
-        QIcon icon11;
-        icon11.addFile(QString::fromUtf8("icons/actions/mirror2.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHorizontal_Mirror->setIcon(icon11);
+        QIcon icon18;
+        icon18.addFile(QString::fromUtf8("icons/object-flip-vertical.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHorizontal_Mirror->setIcon(icon18);
+        actionEllipse = new QAction(MainWindow);
+        actionEllipse->setObjectName(QString::fromUtf8("actionEllipse"));
+        QIcon icon19;
+        icon19.addFile(QString::fromUtf8("icons/draw-ellipse.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionEllipse->setIcon(icon19);
+        actionPath = new QAction(MainWindow);
+        actionPath->setObjectName(QString::fromUtf8("actionPath"));
+        QIcon icon20;
+        icon20.addFile(QString::fromUtf8("icons/draw-polyline.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionPath->setIcon(icon20);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         sizePolicy.setHeightForWidth(centralWidget->sizePolicy().hasHeightForWidth());
@@ -209,7 +242,7 @@ public:
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         sizePolicy.setHeightForWidth(tabWidget->sizePolicy().hasHeightForWidth());
         tabWidget->setSizePolicy(sizePolicy);
-        tabWidget->setTabsClosable(true);
+        tabWidget->setTabsClosable(false);
         tabWidget->setMovable(true);
 
         verticalLayout_2->addWidget(tabWidget);
@@ -220,7 +253,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 800, 21));
+        menuBar->setGeometry(QRect(0, 0, 800, 25));
         menuFile = new QMenu(menuBar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuImage = new QMenu(menuBar);
@@ -265,6 +298,7 @@ public:
         menuImage->addAction(actionGrayscale);
         menuImage->addAction(actionFusion);
         menuImage->addAction(actionResize);
+        menuImage->addSeparator();
         menuImage->addAction(actionVertical_Resize);
         menuImage->addAction(actionHorizontal_Resize);
         menuImage->addSeparator();
@@ -293,6 +327,8 @@ public:
         menuSelect->addAction(actionSelect_all);
         menuSelect->addAction(actionNone);
         menuSelect->addAction(actionRectangle);
+        menuSelect->addAction(actionEllipse);
+        menuSelect->addAction(actionPath);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
         toolBar->addSeparator();
@@ -302,6 +338,8 @@ public:
         toolBar->addAction(actionSelect_all);
         toolBar->addAction(actionNone);
         toolBar->addAction(actionRectangle);
+        toolBar->addAction(actionEllipse);
+        toolBar->addAction(actionPath);
         toolBar->addAction(actionCrop);
         toolBar->addSeparator();
         toolBar->addAction(actionRotate_270);
@@ -340,6 +378,8 @@ public:
         QObject::connect(actionRotate_270, SIGNAL(triggered()), MainWindow, SLOT(rotateCounterClockwise()));
         QObject::connect(actionVertical_Mirror, SIGNAL(triggered()), MainWindow, SLOT(verticalMirror()));
         QObject::connect(actionHorizontal_Mirror, SIGNAL(triggered()), MainWindow, SLOT(horizontalMirror()));
+        QObject::connect(actionEllipse, SIGNAL(triggered()), MainWindow, SLOT(setEllipseTool()));
+        QObject::connect(actionPath, SIGNAL(triggered()), MainWindow, SLOT(setPathTool()));
 
         tabWidget->setCurrentIndex(-1);
 
@@ -397,9 +437,9 @@ public:
         actionEdge_Enhancement->setText(QApplication::translate("MainWindow", "Edge Enhancement", 0, QApplication::UnicodeUTF8));
         actionPaint->setText(QApplication::translate("MainWindow", "Paint", 0, QApplication::UnicodeUTF8));
         actionEdge_Detection->setText(QApplication::translate("MainWindow", "Edge Detection", 0, QApplication::UnicodeUTF8));
-        actionVertical_Resize->setText(QApplication::translate("MainWindow", "Vertical Resize", 0, QApplication::UnicodeUTF8));
+        actionVertical_Resize->setText(QApplication::translate("MainWindow", "Smart Vertical Resize", 0, QApplication::UnicodeUTF8));
         actionVertical_Resize->setShortcut(QApplication::translate("MainWindow", "V", 0, QApplication::UnicodeUTF8));
-        actionHorizontal_Resize->setText(QApplication::translate("MainWindow", "Horizontal Resize", 0, QApplication::UnicodeUTF8));
+        actionHorizontal_Resize->setText(QApplication::translate("MainWindow", "Smart Horizontal Resize", 0, QApplication::UnicodeUTF8));
         actionHorizontal_Resize->setShortcut(QApplication::translate("MainWindow", "H", 0, QApplication::UnicodeUTF8));
         actionNegative->setText(QApplication::translate("MainWindow", "Negative", 0, QApplication::UnicodeUTF8));
         actionSmooth->setText(QApplication::translate("MainWindow", "Smooth", 0, QApplication::UnicodeUTF8));
@@ -408,6 +448,9 @@ public:
         actionRotate_270->setText(QApplication::translate("MainWindow", "Rotate 270\302\260", 0, QApplication::UnicodeUTF8));
         actionVertical_Mirror->setText(QApplication::translate("MainWindow", "Vertical Mirror", 0, QApplication::UnicodeUTF8));
         actionHorizontal_Mirror->setText(QApplication::translate("MainWindow", "Horizontal Mirror", 0, QApplication::UnicodeUTF8));
+        actionEllipse->setText(QApplication::translate("MainWindow", "Ellipse", 0, QApplication::UnicodeUTF8));
+        actionEllipse->setShortcut(QApplication::translate("MainWindow", "E", 0, QApplication::UnicodeUTF8));
+        actionPath->setText(QApplication::translate("MainWindow", "Path", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));

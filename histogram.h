@@ -5,6 +5,8 @@
 
 #include "kimage.h"
 
+typedef class KImage KImage;
+
 class Histogram : public QFrame
 {
 protected:

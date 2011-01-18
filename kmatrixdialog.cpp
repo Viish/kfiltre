@@ -8,12 +8,14 @@ KmatrixDialog::KmatrixDialog(QWidget *parent) :
 {
     main = (MainWindow*) parent;
     ui->setupUi(this);
+    setMatrixSize(3);
 }
 
 KmatrixDialog::~KmatrixDialog()
 {
     delete ui;
 }
+
 
 int** KmatrixDialog::getValues()
 {
@@ -36,7 +38,6 @@ int** KmatrixDialog::getValues()
             QString value = ui->tableWidget->item(i, j)->text();
             if(value.contains('-'))
             {
-                std::cerr << "neg" << std::endl;
                 value = value.remove('-');
                 neg = -1;
             }
@@ -48,11 +49,21 @@ int** KmatrixDialog::getValues()
 
 void KmatrixDialog::setMatrixSize(int size)
 {
-    size = size + size%2 -1;
+    size = size + size % 2 - 1;
     ui->spinBox->setValue(size);
     ui->tableWidget->setRowCount(size);
     ui->tableWidget->setColumnCount(size);
-    this->setFixedSize(38 + size*40, 120 + size*40);
+
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            QTableWidgetItem *item = new QTableWidgetItem(QString("0"));
+            ui->tableWidget->setItem(i, j, item);
+        }
+    }
+
+    this->setFixedSize(38 + size * 40, 120 + size * 40);
 }
 
 void KmatrixDialog::validateCustomMatrix()

@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "mainwindow.h"
 
+typedef class MainWindow MainWindow;
+
 namespace Ui {
     class KResizeDialog;
 }
@@ -15,6 +17,7 @@ class KResizeDialog : public QDialog
 public:
     explicit KResizeDialog(QWidget *parent = 0);
     ~KResizeDialog();
+    void setProgressBar(int);
 
 public slots :
     void changeWidthValue();

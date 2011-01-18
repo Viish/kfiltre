@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'kresizedialog.h'
 **
-** Created: Wed Jan 12 17:23:17 2011
+** Created: Tue Jan 18 12:10:53 2011
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.6.2)
 **
 ** WARNING! All changes made in this file will be lost!

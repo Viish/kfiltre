@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kmatrixdialog.ui'
 **
-** Created: Wed Jan 12 16:14:55 2011
+** Created: Tue Jan 18 12:09:47 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -43,7 +43,7 @@ public:
     {
         if (KmatrixDialog->objectName().isEmpty())
             KmatrixDialog->setObjectName(QString::fromUtf8("KmatrixDialog"));
-        KmatrixDialog->resize(148, 242);
+        KmatrixDialog->resize(170, 242);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -65,6 +65,7 @@ public:
         tableWidget->setDragDropOverwriteMode(false);
         tableWidget->setDragDropMode(QAbstractItemView::NoDragDrop);
         tableWidget->setDefaultDropAction(Qt::CopyAction);
+        tableWidget->setAlternatingRowColors(true);
         tableWidget->setRowCount(3);
         tableWidget->setColumnCount(3);
         tableWidget->horizontalHeader()->setVisible(false);
@@ -87,6 +88,7 @@ public:
         spinBox->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox->setMinimum(3);
         spinBox->setMaximum(15);
+        spinBox->setSingleStep(2);
 
         gridLayout_3->addWidget(spinBox, 0, 1, 1, 1);
 

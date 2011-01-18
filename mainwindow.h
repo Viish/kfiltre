@@ -17,10 +17,6 @@ enum SIDE {
     TOP, BOTTOM, LEFT, RIGHT
 };
 
-enum TOOL {
-    NONE, RESIZE, RECTANGLE, MOVE
-};
-
 namespace Ui {
     class MainWindow;
 }
@@ -33,20 +29,26 @@ public:
     KImage* getCurrentImage();
     void displayPixelColor(int, int);
     void setSelectionTopLeftCorner(int, int);
-    void setSelectionBottomRightCorner(int, int);
+    void setSelectionBottomRightCorner(int, int, bool = false, bool = false);
     TOOL getTool();
     void setNullTool();
     void moveSelection(int, int);
-    QRect getSelection();
     void moveSelection();
     void resizeSelection();
-    void resize(int, int, bool smart = false);
+    void resize(int, int, bool smart = false, KResizeDialog* = NULL);
     void resizeSelection(int, SIDE);
-    void smartResize(int, int);
+    void smartResize(int, int, KResizeDialog* = NULL);
     void refresh(KImage*);
     void validateFusion(KImage*, int);
     Tab* getCurrentTab();
     void applyCustomMatrix(int**, int, int);
+    QRect getSelection();
+    TOOL getSelectionShape();
+
+    void addToTempPath(int, int);
+    void addToPath(int, int);
+    void finishPath(int, int);
+    void deletePath();
 
 public slots:
         void open();
@@ -59,6 +61,8 @@ public slots:
         void showHistogram();
         void showYUVHistogram();
         void setRectTool();
+        void setEllipseTool();
+        void setPathTool();
         void selectAll();
         void cancelSelection();
         void applyBlur();
@@ -86,10 +90,10 @@ private:
     Ui::MainWindow *ui;
     KImage *image;
     Histogram *histogram;
-    int x1, y1, x2, y2;
-    void newGraphicsViewTab(QString);
+    KImage *damier;
     TOOL tool;
 
+    void newGraphicsViewTab(QString);
     void disableActions();
     void enableActions();
     void enableUndo();
@@ -101,6 +105,8 @@ private:
     void enableCrop();
     void enableSave();
     void disableSave();
+    void enableCloseTab();
+    void disableCloseTab();
     QString getCroppedFilename();
 
 private slots:

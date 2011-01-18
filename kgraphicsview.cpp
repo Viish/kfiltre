@@ -1,22 +1,33 @@
-#include "kgraphicsview.h"
-#include <iostream>
 #include <QMouseEvent>
 #include <QScrollBar>
-#include <string>
 #include <QCursor>
+
+#include "kgraphicsview.h"
 
 #define MARGIN_RESIZE 5
 
 KGraphicsView::KGraphicsView(MainWindow *main, QWidget *parent) :
-    QGraphicsView(parent), main(main)
+    QGraphicsView(parent), main(main), keepRatio(false)
 {
     setMouseTracking(true);
 }
 
 KGraphicsView::KGraphicsView(MainWindow *main, QGraphicsScene *scene, QWidget *parent) :
-    QGraphicsView(scene, parent), main(main)
+    QGraphicsView(scene, parent), main(main), keepRatio(false)
 {
     setMouseTracking(true);
+}
+
+void KGraphicsView::keyPressEvent(QKeyEvent * ev)
+{
+    if (ev->key() == Qt::Key_Control)
+        keepRatio = true;
+}
+
+void KGraphicsView::keyReleaseEvent(QKeyEvent * ev)
+{
+    if (ev->key() == Qt::Key_Control)
+        keepRatio = false;
 }
 
 void KGraphicsView::mouseMoveEvent(QMouseEvent *mouseEvent)
@@ -36,7 +47,10 @@ void KGraphicsView::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     if (mouseEvent->buttons() != Qt::NoButton)
     {
-        if (main->getTool() == RECTANGLE) { main->setSelectionBottomRightCorner(x, y); }
+        if (main->getTool() == RECTANGLE || main->getTool() == ELLIPSE)
+        {
+            main->setSelectionBottomRightCorner(x, y, false, keepRatio);
+        }
         else if (main->getTool() == MOVE) { main->moveSelection(x-oldX, y-oldY); oldX = x; oldY = y; }
         else if (main->getTool() == RESIZE)
         {
@@ -56,21 +70,30 @@ void KGraphicsView::mouseMoveEvent(QMouseEvent *mouseEvent)
         main->displayPixelColor(x, y);
         this->setCursor(QCursor(Qt::ArrowCursor));
 
-        QRect selection = main->getSelection();
-        if (y > selection.y() && y < selection.height())
+
+        if (main->getTool() == PATH)
         {
-            if ((x >= selection.x() - MARGIN_RESIZE && x<= selection.x() + MARGIN_RESIZE) ||
-                (x >= selection.width() - MARGIN_RESIZE && x <= selection.width() + MARGIN_RESIZE))
-            {
-                this->setCursor(QCursor(Qt::SizeHorCursor));
-            }
+            main->addToTempPath(x, y);
+            this->setCursor(QCursor(Qt::CrossCursor));
         }
-        else if (x > selection.x() && x < selection.width())
+        else
         {
-            if ((y >= selection.y() - MARGIN_RESIZE && y <= selection.y() + MARGIN_RESIZE) ||
-                (y >= selection.height() - MARGIN_RESIZE && y <= selection.height() + MARGIN_RESIZE))
+            QRect selection = main->getSelection();
+            if (y > selection.y() && y < selection.height())
             {
-                this->setCursor(QCursor(Qt::SizeVerCursor));
+                if ((x >= selection.x() - MARGIN_RESIZE && x <= selection.x() + MARGIN_RESIZE) ||
+                    (x >= selection.width() - MARGIN_RESIZE && x <= selection.width() + MARGIN_RESIZE))
+                {
+                    this->setCursor(QCursor(Qt::SizeHorCursor));
+                }
+            }
+            else if (x > selection.x() && x < selection.width())
+            {
+                if ((y >= selection.y() - MARGIN_RESIZE && y <= selection.y() + MARGIN_RESIZE) ||
+                    (y >= selection.height() - MARGIN_RESIZE && y <= selection.height() + MARGIN_RESIZE))
+                {
+                    this->setCursor(QCursor(Qt::SizeVerCursor));
+                }
             }
         }
     }
@@ -93,7 +116,21 @@ void KGraphicsView::mousePressEvent(QMouseEvent *mouseEvent)
     if (x > main->getCurrentImage()->width) x = main->getCurrentImage()->width;
     if (y > main->getCurrentImage()->height) y = main->getCurrentImage()->height;
 
-    if (main->getTool() == RECTANGLE) { main->setSelectionTopLeftCorner(x, y); this->setCursor(QCursor(Qt::CrossCursor)); }
+    if (main->getTool() == RECTANGLE || main->getTool() == ELLIPSE) { main->setSelectionTopLeftCorner(x, y); this->setCursor(QCursor(Qt::CrossCursor)); }
+    else if (main->getTool() == PATH)
+    {
+        if (mouseEvent->button() == Qt::RightButton)
+        {
+            main->finishPath(x, y);
+            this->setCursor(QCursor(Qt::ArrowCursor));
+            main->setNullTool();
+        }
+        else
+        {
+            main->addToPath(x, y);
+            this->setCursor(QCursor(Qt::CrossCursor));
+        }
+    }
     else
     {
         oldX = x;
@@ -155,9 +192,16 @@ void KGraphicsView::mouseReleaseEvent(QMouseEvent *mouseEvent)
     if (x > main->getCurrentImage()->width) x = main->getCurrentImage()->width;
     if (y > main->getCurrentImage()->height) y = main->getCurrentImage()->height;
 
-    if (main->getTool() == RECTANGLE) { main->setSelectionBottomRightCorner(x, y); }
-    main->setNullTool();
-    this->setCursor(QCursor(Qt::ArrowCursor));
+    if (main->getTool() == PATH) {  }
+    else
+    {
+        if (main->getTool() == RECTANGLE || main->getTool() == ELLIPSE)
+        {
+            main->setSelectionBottomRightCorner(x, y, true, keepRatio);
+        }
+        main->setNullTool();
+        this->setCursor(QCursor(Qt::ArrowCursor));
+    }
 
     QGraphicsView::mouseReleaseEvent(mouseEvent);
 }
