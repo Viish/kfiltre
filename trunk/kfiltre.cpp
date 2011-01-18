@@ -1,20 +1,15 @@
 #include "kfiltre.h"
 
-KFiltre::~KFiltre()
-{
-    for (int i = 0; i < this->taille; ++i) delete[] this->matrix[i];
-    delete [] this->matrix;
-}
-
-KFiltre::KFiltre(int** matrix, int taille, int diviseur) : matrix(matrix), taille(taille), diviseur(diviseur)
+KFiltre::KFiltre(int** matrix, int taille, int diviseur) :
+        matrix(matrix), taille(taille), diviseur(diviseur)
 { }
 
-KFiltre::KFiltre(FILTER filtre) : diviseur(1)
+KFiltre::KFiltre(FILTER filtre) :
+        matrix(0), taille(3), diviseur(1)
 {
     switch (filtre)
     {
     case BLUR :
-        taille = 3;
         diviseur = 9;
         matrix = new int*[taille];
 
@@ -29,7 +24,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case EDGE_V :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -46,7 +40,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case EDGE_H :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -63,7 +56,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case PAINT :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -85,7 +77,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case EDGE :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -105,7 +96,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case LAPLACIEN :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -121,7 +111,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case PREWITT_Y :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -142,7 +131,6 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         break;
 
     case PREWITT_X :
-        taille = 3;
         matrix = new int*[taille];
 
         for (int i = 0; i < taille; i++)
@@ -162,4 +150,10 @@ KFiltre::KFiltre(FILTER filtre) : diviseur(1)
         matrix[2][2] = 1;
         break;
     }
+}
+
+KFiltre::~KFiltre()
+{
+    for (int i = 0; i < this->taille; ++i) delete[] this->matrix[i];
+    delete [] this->matrix;
 }

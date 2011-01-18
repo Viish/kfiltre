@@ -38,5 +38,12 @@ void KResizeDialog::changeWidthValue()
 }
 void KResizeDialog::validateResize()
 {
-    main->resize(ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_2->isChecked());
+    main->resize(ui->spinBox->value(), ui->spinBox_2->value(), ui->checkBox_2->isChecked(), this);
+    if(!ui->checkBox_2->isChecked()) ui->progressBar->setValue(100);
+}
+
+void KResizeDialog::setProgressBar(int value)
+{
+    ui->progressBar->setValue(value);
+    ui->progressBar->repaint();
 }

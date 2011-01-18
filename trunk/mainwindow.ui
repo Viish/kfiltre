@@ -59,7 +59,7 @@
          <number>-1</number>
         </property>
         <property name="tabsClosable">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="movable">
          <bool>true</bool>
@@ -76,7 +76,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -97,6 +97,7 @@
     <addaction name="actionGrayscale"/>
     <addaction name="actionFusion"/>
     <addaction name="actionResize"/>
+    <addaction name="separator"/>
     <addaction name="actionVertical_Resize"/>
     <addaction name="actionHorizontal_Resize"/>
     <addaction name="separator"/>
@@ -146,6 +147,8 @@
      <addaction name="actionSelect_all"/>
      <addaction name="actionNone"/>
      <addaction name="actionRectangle"/>
+     <addaction name="actionEllipse"/>
+     <addaction name="actionPath"/>
     </widget>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
@@ -190,6 +193,8 @@
    <addaction name="actionSelect_all"/>
    <addaction name="actionNone"/>
    <addaction name="actionRectangle"/>
+   <addaction name="actionEllipse"/>
+   <addaction name="actionPath"/>
    <addaction name="actionCrop"/>
    <addaction name="separator"/>
    <addaction name="actionRotate_270"/>
@@ -203,7 +208,7 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/document-open.png</normaloff>icons/actions/document-open.png</iconset>
+     <normaloff>icons/document-open.png</normaloff>icons/document-open.png</iconset>
    </property>
    <property name="text">
     <string>Open...</string>
@@ -230,7 +235,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset>
-     <normaloff>icons/devices/media-floppy.png</normaloff>icons/devices/media-floppy.png</iconset>
+     <normaloff>icons/document-save.png</normaloff>icons/document-save.png</iconset>
    </property>
    <property name="text">
     <string>Save</string>
@@ -256,7 +261,7 @@
   <action name="actionCrop">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/edit-cut.png</normaloff>icons/actions/edit-cut.png</iconset>
+     <normaloff>icons/transform-crop.png</normaloff>icons/transform-crop.png</iconset>
    </property>
    <property name="text">
     <string>Crop</string>
@@ -269,21 +274,37 @@
    <property name="checked">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/layer-visible-off.png</normaloff>icons/layer-visible-off.png</iconset>
+   </property>
    <property name="text">
     <string>Grayscale</string>
    </property>
   </action>
   <action name="actionFusion">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/insert-image.png</normaloff>icons/insert-image.png</iconset>
+   </property>
    <property name="text">
     <string>Fusion...</string>
    </property>
   </action>
   <action name="actionResize">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/transform-scale.png</normaloff>icons/transform-scale.png</iconset>
+   </property>
    <property name="text">
     <string>Resize...</string>
    </property>
   </action>
   <action name="actionRGB">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/preferences-activities.png</normaloff>icons/preferences-activities.png</iconset>
+   </property>
    <property name="text">
     <string>RGB</string>
    </property>
@@ -302,11 +323,19 @@
    </property>
   </action>
   <action name="actionAbout_us">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/help-about.png</normaloff>icons/help-about.png</iconset>
+   </property>
    <property name="text">
     <string>About us</string>
    </property>
   </action>
   <action name="actionSave_as">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/document-save-as.png</normaloff>icons/document-save-as.png</iconset>
+   </property>
    <property name="text">
     <string>Save as...</string>
    </property>
@@ -318,6 +347,10 @@
    </property>
   </action>
   <action name="actionYUV">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/view-object-histogram-logarithmic.png</normaloff>icons/view-object-histogram-logarithmic.png</iconset>
+   </property>
    <property name="text">
     <string>YUV</string>
    </property>
@@ -328,7 +361,7 @@
   <action name="actionSelect_all">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/view-fullscreen.png</normaloff>icons/actions/view-fullscreen.png</iconset>
+     <normaloff>icons/select_all.png</normaloff>icons/select_all.png</iconset>
    </property>
    <property name="text">
     <string>All</string>
@@ -340,7 +373,7 @@
   <action name="actionNone">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/process-stop.png</normaloff>icons/actions/process-stop.png</iconset>
+     <normaloff>icons/dialog-cancel.png</normaloff>icons/dialog-cancel.png</iconset>
    </property>
    <property name="text">
     <string>None</string>
@@ -352,7 +385,7 @@
   <action name="actionRectangle">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/media-playback-stop.png</normaloff>icons/actions/media-playback-stop.png</iconset>
+     <normaloff>icons/draw-rectangle.png</normaloff>icons/draw-rectangle.png</iconset>
    </property>
    <property name="text">
     <string>Rectangle</string>
@@ -364,7 +397,7 @@
   <action name="actionUndo">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/edit-undo.png</normaloff>icons/actions/edit-undo.png</iconset>
+     <normaloff>icons/edit-undo.png</normaloff>icons/edit-undo.png</iconset>
    </property>
    <property name="text">
     <string>Undo</string>
@@ -376,7 +409,7 @@
   <action name="actionRedo">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/edit-redo.png</normaloff>icons/actions/edit-redo.png</iconset>
+     <normaloff>icons/edit-redo.png</normaloff>icons/edit-redo.png</iconset>
    </property>
    <property name="text">
     <string>Redo</string>
@@ -407,7 +440,7 @@
   </action>
   <action name="actionVertical_Resize">
    <property name="text">
-    <string>Vertical Resize</string>
+    <string>Smart Vertical Resize</string>
    </property>
    <property name="shortcut">
     <string>V</string>
@@ -415,7 +448,7 @@
   </action>
   <action name="actionHorizontal_Resize">
    <property name="text">
-    <string>Horizontal Resize</string>
+    <string>Smart Horizontal Resize</string>
    </property>
    <property name="shortcut">
     <string>H</string>
@@ -439,7 +472,7 @@
   <action name="actionRotate_90">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/go-jump.png</normaloff>icons/actions/go-jump.png</iconset>
+     <normaloff>icons/object-rotate-right.png</normaloff>icons/object-rotate-right.png</iconset>
    </property>
    <property name="text">
     <string>Rotate 90°</string>
@@ -448,7 +481,7 @@
   <action name="actionRotate_270">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/go-jump2.png</normaloff>icons/actions/go-jump2.png</iconset>
+     <normaloff>icons/object-rotate-left.png</normaloff>icons/object-rotate-left.png</iconset>
    </property>
    <property name="text">
     <string>Rotate 270°</string>
@@ -457,7 +490,7 @@
   <action name="actionVertical_Mirror">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/mirror.png</normaloff>icons/actions/mirror.png</iconset>
+     <normaloff>icons/object-flip-horizontal.png</normaloff>icons/object-flip-horizontal.png</iconset>
    </property>
    <property name="text">
     <string>Vertical Mirror</string>
@@ -466,10 +499,31 @@
   <action name="actionHorizontal_Mirror">
    <property name="icon">
     <iconset>
-     <normaloff>icons/actions/mirror2.png</normaloff>icons/actions/mirror2.png</iconset>
+     <normaloff>icons/object-flip-vertical.png</normaloff>icons/object-flip-vertical.png</iconset>
    </property>
    <property name="text">
     <string>Horizontal Mirror</string>
+   </property>
+  </action>
+  <action name="actionEllipse">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/draw-ellipse.png</normaloff>icons/draw-ellipse.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ellipse</string>
+   </property>
+   <property name="shortcut">
+    <string>E</string>
+   </property>
+  </action>
+  <action name="actionPath">
+   <property name="icon">
+    <iconset>
+     <normaloff>icons/draw-polyline.png</normaloff>icons/draw-polyline.png</iconset>
+   </property>
+   <property name="text">
+    <string>Path</string>
    </property>
   </action>
  </widget>
@@ -956,6 +1010,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionEllipse</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setEllipseTool()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPath</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setPathTool()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>open()</slot>
@@ -988,5 +1074,7 @@
   <slot>rotateCounterClockwise()</slot>
   <slot>verticalMirror()</slot>
   <slot>horizontalMirror()</slot>
+  <slot>setEllipseTool()</slot>
+  <slot>setPathTool()</slot>
  </slots>
 </ui>

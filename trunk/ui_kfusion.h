@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kfusion.ui'
 **
-** Created: Wed Jan 12 16:14:55 2011
+** Created: Tue Jan 18 12:09:47 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -44,6 +44,7 @@ public:
         if (KFusion->objectName().isEmpty())
             KFusion->setObjectName(QString::fromUtf8("KFusion"));
         KFusion->resize(682, 395);
+        KFusion->setSizeGripEnabled(true);
         gridLayout = new QGridLayout(KFusion);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         verticalLayout = new QVBoxLayout();

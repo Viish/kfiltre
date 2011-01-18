@@ -2,37 +2,12 @@
 #define KIMAGE_H
 
 #include <QImage>
-#include <QRgb>
-#include "kfiltre.h"
 
-#define C_RED 0.299
-#define C_GREEN 0.587
-#define C_BLUE 0.114
+#include "kimage_fwd.h"
 
-class Point
-{
-public :
-    Point(int, int);
-    Point();
-    int x, y;
-    int pathEnergy;
-};
+typedef class KResizeDialog KResizeDialog;
 
-class KRGB {
-public:
-    int red;
-    int green;
-    int blue;
-    int energy;
-
-public:
-    KRGB();
-    KRGB(int red, int green, int blue, int energy = 0);
-    void toGray();
-    KRGB *copyToYUV();
-    KRGB copy();
-    friend class KImage;
-};
+class KFiltre;
 
 class KImage
 {
@@ -41,63 +16,86 @@ protected:
     KImage *nextImage;
     QString filename;
     bool saved;
+    int **energy;
+
+    KImage& operator=(const KImage&);
 
 public:
+    Pixel **matrix;
+    int realWidth;
+    int realHeight;
     int width;
     int height;
-    KRGB **matrix;
-    Point **entryPointsX, **entryPointsY;
-    bool isEnergyDirty;
+    int nextVSeam, nextHSeam;
+    Seam *pathX, *pathY;
 
+    KImage();
+    KImage(const KImage&);
     KImage(QString);
-    KImage(int, int, QString);
+    KImage(int, int, QString = "");
     ~KImage();
+
+    void deleteMatrix();
+    void deleteSeamCarving();
     QImage toQImage();
+    void loadImage(const QImage&);
+    void reload();
+    void copy(const KImage&);
+
     QString getFilename();
     void setFilename(QString);
+    Pixel getPixel(int x, int y) const;
+    Pixel getYUVPixel(int x, int y) const;
+
     KImage* toGrayScale();
-    KImage* toGrayScale(int, int, int, int);
+    KImage* toGrayScale(Path*);
+    KImage* toGrayScale(int, int, int, int, TOOL, Path* = NULL);
     KImage* copy();
     KImage* getPrevious();
     KImage* getNext();
     KImage* rotateClockwise();
     KImage* rotateCounterClockwise();
-    KImage* applyFilter(KFiltre *, bool setDirty = true);
-    KImage* applyFilter(KFiltre *, int, int, int, int, bool setDirty = true);
+    KImage* applyFilter(const KFiltre&, bool setDirty = true);
+    KImage* applyFilter(const KFiltre&, Path*, bool setDirty = true);
+    KImage* applyFilter(const KFiltre&, int, int, int, int, TOOL, Path* = NULL, bool setDirty = true);
     KImage* resize(int, int, bool scale = false);
     KImage* fusion(KImage* image, int factor);
     KImage* applyNegative();
-    KImage* applyNegative(int, int, int, int);
+    KImage* applyNegative(Path*);
+    KImage* applyNegative(int, int, int, int, TOOL, Path* = NULL);
     KImage* applyMedianSmoothing();
-    KImage* applyMedianSmoothing(int, int, int, int);
+    KImage* applyMedianSmoothing(Path*);
+    KImage* applyMedianSmoothing(int, int, int, int, TOOL, Path* = NULL);
     KImage* verticalMirror();
     KImage* horizontalMirror();
 
-    void sortArray(int*);
+    void fusion(const KImage &image, KImage &target, int factor);
+    void sortArray(unsigned char*, int = 9);
     void setNext(KImage*);
     void removePrevious();
     void removeNext();
     bool isSaved();
     void setSaved(bool);
     void setNextUnsaved();
+    bool isInsideEllipse(int, int, int, int, int, int);
+    bool isInsidePath(int, int, Path*);
+    double angle2D(double, double, double, double);
 
-    void calculateEnergy();
-    Point* generateLowCostVerticalPath(int x);
-    Point* generateLowCostHorizontalPath(int x);
-    int getLowCostEntryPointX();
-    int getLowCostEntryPointY();
-    Point** generateEntryPointsX();
-    Point** generateEntryPointsY();
-    int getVerticalPathEnergy(Point* path);
-    int getHorizontalPathEnergy(Point* path);
-    KImage* removeVerticalPath(Point* path);
-    KImage* removeHorizontalPath(Point* path);
-    KImage* seamCarving(int, int);
+    KImage* seamCarving(int, int, KResizeDialog* = NULL);
+    void initSeamCarving();
+    void initEnergy();
+    void initVerticalPaths();
+    void initHorizontalPaths();
 
-    friend class KRGB;
+    void recalculateEnergy(int minx, int maxx, int miny, int maxy);
+    void generateVerticalPaths(int, int);
+    void generateHorizontalPaths(int, int);
+    void generateVerticalPath(int);
+    void generateHorizontalPath(int);
+    void removeVerticalPath(int);
+    void removeHorizontalPath(int);
+    int gradient(int x, int y);
 
-private :
-    KRGB** getPixels(int, int, int);
 };
 
 #endif // KIMAGE_H

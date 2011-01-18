@@ -6,6 +6,14 @@
 
 class KGraphicsView : public QGraphicsView
 {
+private :
+    MainWindow *main;
+    int getOffsetX();
+    int getOffsetY();
+    int oldX, oldY;
+    bool keepRatio;
+    SIDE resizeSide;
+
 public:
     explicit KGraphicsView(MainWindow *main, QWidget *parent = 0);
     explicit KGraphicsView(MainWindow *main, QGraphicsScene *scene, QWidget *parent = 0);
@@ -13,16 +21,8 @@ public:
     void mouseReleaseEvent(QMouseEvent *mouseEvent);
     void mouseMoveEvent(QMouseEvent *mouseEvent);
     void mousePressEvent(QMouseEvent *mouseEvent);
-signals:
-
-public slots:
-
-private :
-    MainWindow *main;
-    int getOffsetX();
-    int getOffsetY();
-    int oldX, oldY;
-    SIDE resizeSide;
+    void keyPressEvent(QKeyEvent * ev);
+    void keyReleaseEvent(QKeyEvent * ev);
 };
 
 #endif // KGRAPHICSVIEW_H

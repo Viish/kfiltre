@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kresizedialog.ui'
 **
-** Created: Wed Jan 12 15:34:01 2011
+** Created: Tue Jan 18 12:09:47 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -21,6 +21,7 @@
 #include <QtGui/QGridLayout>
 #include <QtGui/QHeaderView>
 #include <QtGui/QLabel>
+#include <QtGui/QProgressBar>
 #include <QtGui/QSpinBox>
 
 QT_BEGIN_NAMESPACE
@@ -39,12 +40,13 @@ public:
     QGridLayout *gridLayout_3;
     QDialogButtonBox *buttonBox;
     QDialogButtonBox *buttonBox_2;
+    QProgressBar *progressBar;
 
     void setupUi(QDialog *KResizeDialog)
     {
         if (KResizeDialog->objectName().isEmpty())
             KResizeDialog->setObjectName(QString::fromUtf8("KResizeDialog"));
-        KResizeDialog->resize(223, 131);
+        KResizeDialog->resize(225, 172);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -66,6 +68,7 @@ public:
         spinBox->setLocale(QLocale(QLocale::English, QLocale::UnitedStates));
         spinBox->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox->setButtonSymbols(QAbstractSpinBox::PlusMinus);
+        spinBox->setMinimum(1);
         spinBox->setMaximum(6000);
 
         gridLayout_2->addWidget(spinBox, 0, 1, 1, 1);
@@ -74,6 +77,7 @@ public:
         spinBox_2->setObjectName(QString::fromUtf8("spinBox_2"));
         spinBox_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_2->setButtonSymbols(QAbstractSpinBox::PlusMinus);
+        spinBox_2->setMinimum(1);
         spinBox_2->setMaximum(6000);
 
         gridLayout_2->addWidget(spinBox_2, 1, 1, 1, 1);
@@ -120,7 +124,13 @@ public:
         gridLayout_3->addWidget(buttonBox_2, 0, 1, 1, 1);
 
 
-        gridLayout->addLayout(gridLayout_3, 1, 0, 1, 1);
+        gridLayout->addLayout(gridLayout_3, 2, 0, 1, 1);
+
+        progressBar = new QProgressBar(KResizeDialog);
+        progressBar->setObjectName(QString::fromUtf8("progressBar"));
+        progressBar->setValue(0);
+
+        gridLayout->addWidget(progressBar, 1, 0, 1, 1);
 
 
         retranslateUi(KResizeDialog);
