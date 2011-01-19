@@ -92,6 +92,7 @@ private:
     Histogram *histogram;
     KImage *damier;
     TOOL tool;
+    Tab *emptyTab;
 
     void newGraphicsViewTab(QString);
     void disableActions();

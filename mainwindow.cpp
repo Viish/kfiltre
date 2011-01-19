@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->ui->setupUi(this);
     this->damier = new KImage("./icons/damier.png");
     this->disableActions();
+    emptyTab = new Tab(this, NULL);
+    this->ui->tabWidget->insertTab(1, emptyTab, "KFiltre");
+    this->ui->tabWidget->setCurrentIndex(0);
 }
 
 MainWindow::~MainWindow()
@@ -43,7 +46,7 @@ void MainWindow::changeEvent(QEvent *e)
 
 void MainWindow::open()
 {
-    QStringList filenames = QFileDialog::getOpenFileNames(this, "Open a file", QString(), "Images (*.png *.gif *.jpg *.jpeg *.pnm)");
+    QStringList filenames = QFileDialog::getOpenFileNames(this, "Open a file", QString(), "Images (*.png *.gif *.jpg *.jpeg *.pnm *.ico *.bmp *.tiff)");
 
     for(int i = 0; i < filenames.size(); ++i)
     {
@@ -53,8 +56,11 @@ void MainWindow::open()
 
     this->enableActions();
 
-    if (ui->tabWidget->count() > 1)
+    if (ui->tabWidget->count() == 2 and ui->tabWidget->widget(1) == emptyTab)
+    {
+        ui->tabWidget->removeTab(1);
         enableCloseTab();
+    }
 }
 
 void MainWindow::save()
@@ -469,16 +475,15 @@ void MainWindow::crop()
 
 void MainWindow::on_tabWidget_tabCloseRequested(int index)
 {
-    ui->tabWidget->removeTab(index);
-
-    if (ui->tabWidget->count() > 1)
+    if (ui->tabWidget->count() == 1)
     {
-        enableCloseTab();
-    }
-    else
-    {
+        ui->tabWidget->insertTab(1, emptyTab, "KFiltre");
+        ui->tabWidget->setCurrentIndex(0);
+        this->disableActions();
         disableCloseTab();
     }
+
+    ui->tabWidget->removeTab(index);
 }
 
 void MainWindow::addToTempPath(int x, int y)
@@ -597,6 +602,7 @@ void MainWindow::disableActions()
     ui->actionHorizontal_Mirror->setEnabled(false);
     ui->actionEqualize->setEnabled(false);
     ui->actionEllipse->setEnabled(false);
+    ui->actionPath->setEnabled(false);
     disableCrop();
     disableUndo();
     disableRedo();
@@ -630,6 +636,7 @@ void MainWindow::enableActions()
     ui->actionHorizontal_Mirror->setEnabled(true);
     ui->actionEqualize->setEnabled(true);
     ui->actionEllipse->setEnabled(true);
+    ui->actionPath->setEnabled(true);
 }
 
 void MainWindow::enableUndo()
