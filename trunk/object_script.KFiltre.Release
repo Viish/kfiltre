@@ -5,12 +5,12 @@ INPUT(
 ./release\tab.o
 ./release\histogram.o
 ./release\kgraphicsview.o
-./release\kfiltre.o
-./release\kfusion.o
 ./release\kresizedialog.o
 ./release\kmatrixdialog.o
+./release\kfusion.o
+./release\kfiltre.o
 ./release\moc_mainwindow.o
-./release\moc_kfusion.o
 ./release\moc_kresizedialog.o
 ./release\moc_kmatrixdialog.o
+./release\moc_kfusion.o
 );
