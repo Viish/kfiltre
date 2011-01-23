@@ -2,17 +2,20 @@
 #define KGRAPHICSVIEW_H
 
 #include <QGraphicsView>
+
 #include "mainwindow.h"
 
 class KGraphicsView : public QGraphicsView
 {
 private :
     MainWindow *main;
-    int getOffsetX();
-    int getOffsetY();
     int oldX, oldY;
     bool keepRatio;
     SIDE resizeSide;
+    QMenu *rightClick;
+
+    int getOffsetX();
+    int getOffsetY();
 
 public:
     explicit KGraphicsView(MainWindow *main, QWidget *parent = 0);

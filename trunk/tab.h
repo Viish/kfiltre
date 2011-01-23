@@ -6,21 +6,22 @@
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QGraphicsRectItem>
-#include <kgraphicsview.h>
 
+#include "kgraphicsview.h"
 #include "kimage.h"
 
 class Tab : public QWidget
 {
 private :
     QGraphicsItem *lastItem, *tempLine;
-protected:
     QGridLayout *gridLayout;
     QGraphicsScene *scene;
     QImage *bg;
+    QString filename;
     KGraphicsView *graphicsView;
     KImage *image;
     KImage *firstRegistered;
+
 public:
     int x1, y1, x2, y2;
     Path *firstPoint, *lastPoint, *previousPoint, *tempPoint;

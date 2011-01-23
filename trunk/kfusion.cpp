@@ -1,8 +1,7 @@
-#include <iostream>
-
 #include "kfusion.h"
-#include "ui_kfusion.h"
 #include "mainwindow.h"
+#include "kimage.h"
+#include "ui_kfusion.h"
 
 KFusion::KFusion(QWidget *parent) :
         QDialog(parent),
@@ -26,8 +25,6 @@ KFusion::KFusion(QWidget *parent) :
     this->scene->addPixmap(QPixmap::fromImage(preview->toQImage()));
 
     this->ui->graphicsView->setScene(scene);
-
-    std::cerr << "Size :: " << this->width() << "  " << this->height() << std::endl;
 }
 
 KFusion::~KFusion()

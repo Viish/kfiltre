@@ -1,7 +1,6 @@
 #include "kresizedialog.h"
+#include "kimage.h"
 #include "ui_kresizedialog.h"
-
-#include <iostream>
 
 KResizeDialog::KResizeDialog(QWidget *parent) :
     QDialog(parent),

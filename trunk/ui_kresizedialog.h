@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'kresizedialog.ui'
 **
-** Created: Tue Jan 18 12:09:47 2011
+** Created: Sun Jan 23 15:11:14 2011
 **      by: Qt User Interface Compiler version 4.6.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

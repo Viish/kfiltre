@@ -1,11 +1,14 @@
-#include <iostream>
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "tab.h"
 #include "kfiltre.h"
-#include "ui_fusion.h"
 #include "kresizedialog.h"
 #include "kmatrixdialog.h"
+#include "histogram.h"
+#include "kimage.h"
+#include "kfusion.h"
+
+#include "ui_mainwindow.h"
+#include "ui_fusion.h"
 
 Path::Path(int x, int y, Path *next) : point(x,y), next(next)
 {
@@ -14,22 +17,31 @@ Path::Path(int x, int y, Path *next) : point(x,y), next(next)
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(NULL),
-    damier(NULL),
-    tool(NONE)
+    image(NULL),
+    histogram(NULL),
+    tool(NONE),
+    emptyTab(NULL)
 {
     this->ui = new Ui::MainWindow();
     this->ui->setupUi(this);
-    this->damier = new KImage("./icons/damier.png");
+//    this->damier = new KImage("./icons/damier.png");
     this->disableActions();
     emptyTab = new Tab(this, NULL);
     this->ui->tabWidget->insertTab(1, emptyTab, "KFiltre");
     this->ui->tabWidget->setCurrentIndex(0);
+
+    this->rightClick = new QMenu(this);
+    this->rightClick->addAction(this->ui->actionCrop);
 }
 
 MainWindow::~MainWindow()
 {
-    delete damier;
     delete ui;
+}
+
+QMenu* MainWindow::getRightClickMenu()
+{
+    return this->rightClick;
 }
 
 void MainWindow::changeEvent(QEvent *e)

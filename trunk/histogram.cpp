@@ -1,6 +1,7 @@
 #include <QPainter>
 #include <QDesktopWidget>
 
+#include "kimage.h"
 #include "histogram.h"
 
 #define VERTICAL_MARGIN 2
