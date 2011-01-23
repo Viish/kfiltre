@@ -5,9 +5,9 @@
 
 #include "kimage_fwd.h"
 
-typedef class KResizeDialog KResizeDialog;
-
-class KFiltre;
+enum TOOL {
+    NONE, RESIZE, RECTANGLE, MOVE, ELLIPSE, PATH
+};
 
 class KImage
 {
@@ -55,9 +55,9 @@ public:
     KImage* getNext();
     KImage* rotateClockwise();
     KImage* rotateCounterClockwise();
-    KImage* applyFilter(const KFiltre&, bool setDirty = true);
-    KImage* applyFilter(const KFiltre&, Path*, bool setDirty = true);
-    KImage* applyFilter(const KFiltre&, int, int, int, int, TOOL, Path* = NULL, bool setDirty = true);
+    KImage* applyFilter(const KFiltre&);
+    KImage* applyFilter(const KFiltre&, Path*);
+    KImage* applyFilter(const KFiltre&, int, int, int, int, TOOL, Path* = NULL);
     KImage* resize(int, int, bool scale = false);
     KImage* fusion(KImage* image, int factor);
     KImage* applyNegative();

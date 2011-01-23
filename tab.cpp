@@ -4,16 +4,21 @@
 
 #include "tab.h"
 
-#define MIN(x,y) (x < y ? x : y)
-#define MAX(x,y) (x > y ? x : y)
+inline int min(int x, int y) { return (x < y ? x : y); }
+inline int max(int x, int y) { return (x > y ? x : y); }
 
 Tab::Tab(MainWindow *main, QString filename) :
+        lastItem(NULL), tempLine(NULL),
+        gridLayout(NULL),
+        scene(NULL),
         bg(NULL),
-        lastItem(NULL),
+        filename(filename),
+        graphicsView(NULL),
+        image(NULL),
+        firstRegistered(NULL),
         x1(0), y1(0), x2(0), y2(0),
-        firstPoint(NULL),
-        lastPoint(NULL),
-        previousPoint(NULL)
+        firstPoint(NULL), lastPoint(NULL), previousPoint(NULL), tempPoint(NULL),
+        selectionShape(NONE)
 {
     this->bg = new QImage("./icons/back.png");
 
@@ -24,9 +29,10 @@ Tab::Tab(MainWindow *main, QString filename) :
 
     //QImage damier("./icons/damier.png");
     this->scene->addPixmap(QPixmap::fromImage(image->toQImage()));
-    this->scene->setBackgroundBrush(QBrush(QPixmap::fromImage(*bg)));
+    ////this->scene->setBackgroundBrush(QBrush(QPixmap::fromImage(*bg)));
 
     this->graphicsView = new KGraphicsView(main, scene, this);
+    this->graphicsView->setBackgroundBrush(QBrush(QPixmap::fromImage(*bg)));
     //this->graphicsView->setBackgroundBrush(Qt::NoBrush);
     //this->graphicsView->viewport()->setAutoFillBackground(false);
     this->graphicsView->setScene(scene);
@@ -67,17 +73,18 @@ void Tab::setImage(KImage *newImage)
 {
     if (this->image->width != newImage->width or this->image->height != newImage->height)
     {
-        delete this->scene;
+        this->scene->deleteLater();
         this->scene = new QGraphicsScene(this->graphicsView);
-        this->scene->setBackgroundBrush(QBrush(QPixmap::fromImage(*bg)));
+        ////this->scene->setBackgroundBrush(QBrush(QPixmap::fromImage(*bg)));
+        this->scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
         this->graphicsView->setScene(this->scene);
     }
     else
     {
         this->scene->clear();
+        this->scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
     }
     this->image = newImage;
-    this->scene->addPixmap(QPixmap::fromImage(newImage->toQImage()));
     this->graphicsView->show();
 }
 
@@ -429,17 +436,17 @@ bool Tab::isInsidePath2(int x, int y)
             return true;
 
         p2 = p1->next;
-        if (y < MIN(p1->point.y, p2->point.y) && y > MAX(p1->point.y, p2->point.y))
+        if (y > max(p1->point.y, p2->point.y) and y < min(p1->point.y, p2->point.y))
         {
             p1 = p2;
             continue;
         }
 
-        if (y > MIN(p1->point.y, p2->point.y) && y < MAX(p1->point.y, p2->point.y))
+        if (y > min(p1->point.y, p2->point.y) && y < max(p1->point.y, p2->point.y))
         {
-            if (x <= MAX(p1->point.x, p2->point.x))
+            if (x <= max(p1->point.x, p2->point.x))
             {
-                if (p1->point.y == p2->point.y && x >= MIN(p1->point.x, p2->point.x))
+                if (p1->point.y == p2->point.y && x >= min(p1->point.x, p2->point.x))
                     return true;
 
                 if (p1->point.x == p2->point.x)
@@ -467,7 +474,7 @@ bool Tab::isInsidePath2(int x, int y)
             {
                 Path *p3 = p2->next;
 
-                if(y >= MIN(p1->point.y, p3->point.y) && y <= MAX(p1->point.y, p3->point.y))
+                if(y >= min(p1->point.y, p3->point.y) && y <= max(p1->point.y, p3->point.y))
                     count++;
                 else
                     count += 2;

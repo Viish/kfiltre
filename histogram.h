@@ -3,9 +3,7 @@
 
 #include <QFrame>
 
-#include "kimage.h"
-
-typedef class KImage KImage;
+class KImage;
 
 class Histogram : public QFrame
 {

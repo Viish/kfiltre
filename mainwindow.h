@@ -7,15 +7,17 @@
 #include <QGraphicsScene>
 #include <QRect>
 
-#include "histogram.h"
 #include "kimage.h"
-#include "kfusion.h"
-
-typedef class Tab tab;
 
 enum SIDE {
     TOP, BOTTOM, LEFT, RIGHT
 };
+
+class Histogram;
+class KImage;
+class KFusion;
+class KResizeDialog;
+class Tab;
 
 namespace Ui {
     class MainWindow;
@@ -44,6 +46,7 @@ public:
     void applyCustomMatrix(int**, int, int);
     QRect getSelection();
     TOOL getSelectionShape();
+    QMenu* getRightClickMenu();
 
     void addToTempPath(int, int);
     void addToPath(int, int);
@@ -83,17 +86,15 @@ public slots:
         void verticalMirror();
         void horizontalMirror();
 
-protected:
-    void changeEvent(QEvent *e);
-
 private:
     Ui::MainWindow *ui;
     KImage *image;
     Histogram *histogram;
-    KImage *damier;
     TOOL tool;
     Tab *emptyTab;
+    QMenu *rightClick;
 
+    void changeEvent(QEvent *e);
     void newGraphicsViewTab(QString);
     void disableActions();
     void enableActions();

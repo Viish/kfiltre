@@ -1,10 +1,6 @@
 #ifndef KIMAGE_FWD_H
 #define KIMAGE_FWD_H
 
-enum TOOL {
-    NONE, RESIZE, RECTANGLE, MOVE, ELLIPSE, PATH
-};
-
 struct Pixel {
     unsigned char red, green, blue, alpha;
 };
@@ -31,5 +27,8 @@ struct Seam {
     int min, max;
     int *next;
 };
+
+class KResizeDialog;
+class KFiltre;
 
 #endif // KIMAGE_FWD_H

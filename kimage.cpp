@@ -499,17 +499,17 @@ KImage* KImage::horizontalMirror()
     return inversedImage;
 }
 
-KImage* KImage::applyFilter(const KFiltre &filtre, bool dirty)
+KImage* KImage::applyFilter(const KFiltre &filtre)
 {
-    return this->applyFilter(filtre, 0, 0, this->width, this->height, RECTANGLE, NULL, dirty);
+    return this->applyFilter(filtre, 0, 0, this->width, this->height, RECTANGLE, NULL);
 }
 
-KImage* KImage::applyFilter(const KFiltre &filtre, Path *path, bool dirty)
+KImage* KImage::applyFilter(const KFiltre &filtre, Path *path)
 {
-    return this->applyFilter(filtre, 0, 0, this->width, this->height, PATH, path, dirty);
+    return this->applyFilter(filtre, 0, 0, this->width, this->height, PATH, path);
 }
 
-KImage* KImage::applyFilter(const KFiltre &filtre, int x1, int y1, int x2, int y2, TOOL shape, Path *path, bool dirty)
+KImage* KImage::applyFilter(const KFiltre &filtre, int x1, int y1, int x2, int y2, TOOL shape, Path *path)
 {
     KImage* filteredImage = this->copy();
 

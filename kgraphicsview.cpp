@@ -1,21 +1,33 @@
 #include <QMouseEvent>
 #include <QScrollBar>
 #include <QCursor>
+#include <QMenu>
 
 #include "kgraphicsview.h"
+#include "kimage.h"
 
 #define MARGIN_RESIZE 5
 
 KGraphicsView::KGraphicsView(MainWindow *main, QWidget *parent) :
-    QGraphicsView(parent), main(main), keepRatio(false)
+    QGraphicsView(parent),
+    main(main),
+    oldX(0), oldY(0),
+    keepRatio(false),
+    rightClick(NULL)
 {
     setMouseTracking(true);
+    this->rightClick = main->getRightClickMenu();
 }
 
 KGraphicsView::KGraphicsView(MainWindow *main, QGraphicsScene *scene, QWidget *parent) :
-    QGraphicsView(scene, parent), main(main), keepRatio(false)
+    QGraphicsView(scene, parent),
+    main(main),
+    oldX(0), oldY(0),
+    keepRatio(false),
+    rightClick(NULL)
 {
     setMouseTracking(true);
+    this->rightClick = main->getRightClickMenu();
 }
 
 void KGraphicsView::keyPressEvent(QKeyEvent * ev)
@@ -116,7 +128,13 @@ void KGraphicsView::mousePressEvent(QMouseEvent *mouseEvent)
     if (x > main->getCurrentImage()->width) x = main->getCurrentImage()->width;
     if (y > main->getCurrentImage()->height) y = main->getCurrentImage()->height;
 
-    if (main->getTool() == RECTANGLE || main->getTool() == ELLIPSE) { main->setSelectionTopLeftCorner(x, y); this->setCursor(QCursor(Qt::CrossCursor)); }
+    if (main->getTool() == RECTANGLE || main->getTool() == ELLIPSE) {
+//        if (mouseEvent->button() == Qt::RightButton) {
+//            this->rightClick->exec(pos);
+//        } else {
+            main->setSelectionTopLeftCorner(x, y); this->setCursor(QCursor(Qt::CrossCursor));
+//        }
+    }
     else if (main->getTool() == PATH)
     {
         if (mouseEvent->button() == Qt::RightButton)
@@ -151,8 +169,12 @@ void KGraphicsView::mousePressEvent(QMouseEvent *mouseEvent)
             }
             else if (x > selection.x() && x < selection.width())
             {
-                main->moveSelection();
-                this->setCursor(QCursor(Qt::SizeAllCursor));
+                if (mouseEvent->button() == Qt::RightButton) {
+                    this->rightClick->exec(mapToGlobal(pos));
+                } else {
+                    main->moveSelection();
+                    this->setCursor(QCursor(Qt::SizeAllCursor));
+                }
             }
         }
         else if (x > selection.x() && x < selection.width())
@@ -167,11 +189,11 @@ void KGraphicsView::mousePressEvent(QMouseEvent *mouseEvent)
                 resizeSide = BOTTOM;
                 main->resizeSelection();
             }
-            else if (y > selection.y() && y < selection.height())
-            {
-                main->moveSelection();
-                this->setCursor(QCursor(Qt::SizeAllCursor));
-            }
+//            else if (y > selection.y() && y < selection.height())
+//            {
+//                main->moveSelection();
+//                this->setCursor(QCursor(Qt::SizeAllCursor));
+//            }
         }
     }
     QGraphicsView::mousePressEvent(mouseEvent);
