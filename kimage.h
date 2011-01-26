@@ -16,7 +16,7 @@ protected:
     KImage *nextImage;
     QString filename;
     bool saved;
-    int **energy;
+    EnergyMap **energyMap;
 
     KImage& operator=(const KImage&);
 
@@ -96,6 +96,12 @@ public:
     void removeHorizontalPath(int);
     int gradient(int x, int y);
 
+    void calculateVerticalPaths(int k);
+    KImage* addVerticalPaths(int t);
+    void addVerticalPath(int);
+    bool isVerticalPathUsed(int p, int max);
+
+    unsigned char* nextVSeams;
 };
 
 #endif // KIMAGE_H

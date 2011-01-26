@@ -22,10 +22,14 @@ struct Path {
 struct Seam {
     Seam(int);
     Seam();
-    ~Seam();
     int energy;
     int min, max;
     int *next;
+};
+
+struct EnergyMap {
+    EnergyMap();
+    int energy;
 };
 
 class KResizeDialog;
