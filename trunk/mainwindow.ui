@@ -94,10 +94,9 @@
      <string>Image</string>
     </property>
     <addaction name="actionCrop"/>
-    <addaction name="actionGrayscale"/>
     <addaction name="actionFusion"/>
-    <addaction name="actionResize"/>
     <addaction name="separator"/>
+    <addaction name="actionResize"/>
     <addaction name="actionVertical_Resize"/>
     <addaction name="actionHorizontal_Resize"/>
     <addaction name="separator"/>
@@ -120,6 +119,7 @@
      <string>Filters</string>
     </property>
     <addaction name="actionBlur"/>
+    <addaction name="actionGrayscale"/>
     <addaction name="actionNegative"/>
     <addaction name="actionPaint"/>
     <addaction name="actionSmooth"/>
@@ -440,7 +440,7 @@
   </action>
   <action name="actionVertical_Resize">
    <property name="text">
-    <string>Smart Vertical Resize</string>
+    <string>Vertical Smart Resize</string>
    </property>
    <property name="shortcut">
     <string>V</string>
@@ -448,7 +448,7 @@
   </action>
   <action name="actionHorizontal_Resize">
    <property name="text">
-    <string>Smart Horizontal Resize</string>
+    <string>Horizontal Smart Resize</string>
    </property>
    <property name="shortcut">
     <string>H</string>
@@ -524,6 +524,9 @@
    </property>
    <property name="text">
     <string>Path</string>
+   </property>
+   <property name="shortcut">
+    <string>P</string>
    </property>
   </action>
  </widget>

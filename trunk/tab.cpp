@@ -69,9 +69,9 @@ KImage* Tab::getImage()
     return this->image;
 }
 
-void Tab::setImage(KImage *newImage)
+void Tab::setImage(KImage *newImage, bool forceDestroy)
 {
-    if (this->image->width != newImage->width or this->image->height != newImage->height)
+    if (forceDestroy || (this->image->width != newImage->width or this->image->height != newImage->height))
     {
         this->scene->deleteLater();
         this->scene = new QGraphicsScene(this->graphicsView);

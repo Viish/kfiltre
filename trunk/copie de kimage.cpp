@@ -16,7 +16,7 @@ KImage::KImage() :
         nextImage(NULL),
         filename(""),
         saved(false),
-        energyMap(NULL),
+        energy(NULL),
         matrix(NULL),
         realWidth(0),
         realHeight(0),
@@ -33,7 +33,7 @@ KImage::KImage(const KImage& image) :
         nextImage(NULL),
         filename(image.filename),
         saved(false),
-        energyMap(NULL),
+        energy(NULL),
         matrix(NULL),
         realWidth(image.width),
         realHeight(image.height),
@@ -52,7 +52,7 @@ KImage::KImage(QString filename) :
         nextImage(NULL),
         filename(filename),
         saved(true),
-        energyMap(NULL),
+        energy(NULL),
         realWidth(0),
         realHeight(0),
         width(0),
@@ -71,7 +71,7 @@ KImage::KImage(int width, int height, QString filename) :
         nextImage(NULL),
         filename(filename),
         saved(false),
-        energyMap(NULL),
+        energy(NULL),
         matrix(NULL),
         realWidth(width),
         realHeight(height),
@@ -688,9 +688,10 @@ Seam::Seam(int t) : energy(0)
 {
     this->next = new int[t];
 }
-
-EnergyMap::EnergyMap() : energy(0)
-{}
+Seam::~Seam()
+{
+    delete [] this->next;
+}
 
 int KImage::gradient(int x, int y)
 {
@@ -722,14 +723,14 @@ int KImage::gradient(int x, int y)
 
 void KImage::deleteSeamCarving()
 {
-    if (this->energyMap != NULL)
+    if (this->energy != NULL)
     {
         for (int i=0; i < this->realWidth; ++i)
         {
-            delete [] this->energyMap[i];
+            delete [] this->energy[i];
             delete [] this->pathX[i].next;
         }
-        delete [] this->energyMap;
+        delete [] this->energy;
         delete [] this->pathX;
 
         for (int i = 0; i < this->realHeight; i++)
@@ -743,7 +744,7 @@ void KImage::deleteSeamCarving()
 
 void KImage::initSeamCarving()
 {
-    if (this->energyMap == NULL)
+    if (this->energy == NULL)
     {
         this->initEnergy();
         this->initHorizontalPaths();
@@ -753,10 +754,10 @@ void KImage::initSeamCarving()
 
 void KImage::initEnergy()
 {
-    this->energyMap = new EnergyMap*[this->realWidth];
+    this->energy = new int*[this->realWidth];
     for (int i = 0; i < this->realWidth; i++)
     {
-        this->energyMap[i] = new EnergyMap[this->realHeight];
+        this->energy[i] = new int[this->realHeight];
     }
     this->recalculateEnergy(0, this->width, 0, this->height);
 }
@@ -784,23 +785,23 @@ void KImage::initHorizontalPaths()
 void KImage::generateVerticalPath(int p)
 {
     int x = p;
-    int e = this->energyMap[p][0].energy;
+    int e = this->energy[p][0];
     this->pathX[p].max = 0;
     this->pathX[p].min = this->width;
 
     for (int y = 1; y < this->height; y++)
     {
         int nextX = 0;
-        if (x - 1 >= 0 and this->energyMap[x-1][y].energy < this->energyMap[x][y].energy)
+        if (x - 1 >= 0 and this->energy[x-1][y] < this->energy[x][y])
             nextX = -1;
-        if (x + 1 < this->width and this->energyMap[x+1][y].energy < this->energyMap[x + nextX][y].energy)
+        if (x + 1 < this->width and this->energy[x+1][y] < this->energy[x + nextX][y])
             nextX = 1;
 
         this->pathX[p].next[y-1] = nextX;
         x += nextX;
         if (x > this->pathX[p].max) this->pathX[p].max = x;
         if (x < this->pathX[p].min) this->pathX[p].min = x;
-        e += this->energyMap[x][y].energy;
+        e += this->energy[x][y];
     }
 
     this->pathX[p].energy = e;
@@ -811,23 +812,23 @@ void KImage::generateVerticalPath(int p)
 void KImage::generateHorizontalPath(int p)
 {
     int y = p;
-    int e = this->energyMap[0][p].energy;
+    int e = this->energy[0][p];
     this->pathY[p].max = 0;
     this->pathY[p].min = this->height;
 
     for (int x = 1; x < this->width; x++)
     {
         int nextY = 0;
-        if (y - 1 >= 0 and this->energyMap[x][y-1].energy < this->energyMap[x][y].energy)
+        if (y - 1 >= 0 and this->energy[x][y-1] < this->energy[x][y])
             nextY = -1;
-        if (y + 1 < this->height and this->energyMap[x][y+1].energy < this->energyMap[x][y + nextY].energy)
+        if (y + 1 < this->height and this->energy[x][y+1] < this->energy[x][y + nextY])
             nextY = 1;
 
         this->pathY[p].next[x-1] = nextY;
         y += nextY;
         if (y > this->pathY[p].max) this->pathY[p].max = y;
         if (y < this->pathY[p].min) this->pathY[p].min = y;
-        e += this->energyMap[x][y].energy;
+        e += this->energy[x][y];
     }
 
     this->pathY[p].energy = e;
@@ -843,7 +844,7 @@ void KImage::recalculateEnergy(int minx, int maxx, int miny, int maxy)
         for (int j = 0; j < this->height; j++)
         {
             if (i >= minx and i <= maxx and j >= miny and j <= maxy)
-                this->energyMap[i][j].energy = this->gradient(i, j);
+                this->energy[i][j] = this->gradient(i, j);
         }
     }
 }
@@ -860,6 +861,43 @@ void KImage::generateVerticalPaths(int min, int max)
         else
             this->generateVerticalPath(i);
     }
+}
+
+void KImage::calculateVerticalPaths(int k)
+{
+    this->nextVSeams = new int[k];
+    int emin = this->width * 255;
+    int imin = 42;
+
+    std::cout << "nextVSeam " << 0 << " : " << this->nextVSeam << std::endl;
+    for (int index = 1; index < k; index++)
+    {
+        for (int i = 0; i < this->width; i++)
+        {
+            if (!isVerticalPathUsed(i, index) && this->pathX[i].energy < emin)
+            {
+                emin = this->pathX[i].energy;
+                imin = i;
+            }
+        }
+        this->nextVSeams[index] = imin;
+        emin = this->width * 255;
+        std::cout << "nextVSeam " << index << " : " << this->nextVSeams[index] << std::endl;
+    }
+}
+
+bool KImage::isVerticalPathUsed(int p, int max)
+{
+    if (max == 0)
+        return false;
+
+    for (int i = 0; i < max; i++)
+    {
+        if (this->nextVSeams[i] == p)
+            return true;
+    }
+
+    return false;
 }
 
 void KImage::generateHorizontalPaths(int min, int max)
@@ -893,9 +931,49 @@ void KImage::removeVerticalPath(int p)
         x += this->pathX[p].next[j];
     }
 
-    this->nextVSeam = -1;
     this->recalculateEnergy(this->pathX[p].min, this->pathX[p].max, 0, this->height);
     this->generateVerticalPaths(this->pathX[p].min, this->pathX[p].max);
+}
+
+void KImage::addVerticalPaths(int t)
+{
+//    KImage *newImage = new KImage(this->width + t, this->height, this->filename);
+//    sortArray(this->nextVSeams, t);
+
+//    for (int j = 0; j < this->height; j++)
+//    {
+//        int k = 0;
+//        for (int i = 0; i < this->width; i++)
+//        {
+//            if (i == this->pathX[this->nextVSeams[k]] + k)
+//            {
+
+//            }
+//            else
+//            {
+//                newImage->matrix[i+k][j] = this->matrix[i][j];
+//            }
+//        }
+//    }
+
+    for (int k = 0; k < this->width; k++)
+    {
+        int p = k;
+        int x = p;
+        for (int j = 0; j < this->height; j++)
+        {
+            for (int i = 0; i < this->width; i++)
+            {
+                if (i == x)
+                {
+                    this->matrix[i][j].red = 255;
+                    this->matrix[i][j].blue = 0;
+                    this->matrix[i][j].green = 0;
+                }
+            }
+            x += this->pathX[p].next[j];
+        }
+    }
 }
 
 void KImage::removeHorizontalPath(int p)
@@ -915,7 +993,6 @@ void KImage::removeHorizontalPath(int p)
         y += this->pathY[p].next[i];
     }
 
-    this->nextHSeam = -1;
     this->recalculateEnergy(0, this->width, this->pathY[p].min, this->pathY[p].max);
     this->generateHorizontalPaths(this->pathY[p].min, this->pathY[p].max);
 }
@@ -941,7 +1018,7 @@ KImage* KImage::seamCarving(int w, int h, KResizeDialog* dialog)
     {
         int k = w - this->width;
         this->calculateVerticalPaths(k);
-        return this->addVerticalPaths(k);
+        this->addVerticalPaths(k);
     }
     while (this->width > w)
     {
@@ -955,112 +1032,3 @@ KImage* KImage::seamCarving(int w, int h, KResizeDialog* dialog)
 
     return this;
 }
-
-void KImage::calculateVerticalPaths(int k)
-{
-    this->nextVSeams = new unsigned char[k];
-    int emin = this->width * 255;
-    int imin = 0;
-
-    std::cout << "nextVSeam " << 0 << " : " << this->nextVSeam << std::endl;
-    for (int index = 1; index < k; index++)
-    {
-        for (int i = 0; i < this->width; i++)
-        {
-            if (!isVerticalPathUsed((unsigned char) i, index) && this->pathX[i].energy < emin)
-            {
-                emin = this->pathX[i].energy;
-                imin = i;
-            }
-        }
-
-        this->nextVSeams[index] = imin;
-        emin = this->width * 255;
-        imin = 0;
-        std::cout << "nextVSeam " << index << " : " << (int) this->nextVSeams[index] << std::endl;
-    }
-}
-
-bool KImage::isVerticalPathUsed(int p, int max)
-{
-    for (int i = 0; i < max; i++)
-    {
-        if (this->nextVSeams[i] == p)
-            return true;
-    }
-
-    return false;
-}
-
-KImage* KImage::addVerticalPaths(int t)
-{
-    // Anthony look here !
-    KImage *newImage = new KImage(this->width + t, this->height, this->filename);
-    newImage->pathX = this->pathX;
-    for (int i = 0; i < this->width; i++)
-    {
-        for (int j = 0; j < this->height; j++)
-        {
-            newImage->matrix[i][j] = this->matrix[i][j];
-        }
-    }
-    // Don't look after !
-
-    sortArray(this->nextVSeams, t);
-    for (int k = 0; k < t; k++)
-    {
-        newImage->addVerticalPath(this->nextVSeams[k]+k);
-    }
-
-    return newImage;
-}
-
-void KImage::addVerticalPath(int p)
-{
-    int x = p;
-    for (int j = 0; j < this->height; j++)
-    {
-        for (int i = this->width - 1; i >= 0; i--)
-        {
-            if (i > x)
-            {
-                this->matrix[i][j] = this->matrix[i-1][j];
-            }
-            else if (i == x)
-            {
-                if (i > 0 && i < this->width - 1)
-                {
-                    this->matrix[i][j].red = (this->matrix[i+1][j].red + this->matrix[i-1][j].red) / 2;
-                    this->matrix[i][j].green = (this->matrix[i+1][j].green + this->matrix[i-1][j].green) / 2;
-                    this->matrix[i][j].blue = (this->matrix[i+1][j].blue + this->matrix[i-1][j].blue) / 2;
-                    this->matrix[i][j].alpha = (this->matrix[i+1][j].alpha + this->matrix[i-1][j].alpha) / 2;
-                }
-            }
-            else
-            {
-                break;
-            }
-        }
-        x += this->pathX[p].next[j];
-    }
-}
-
-//    for (int k = 0; k < this->width; k++)
-//    {
-//        int p = k;
-//        int x = p;
-//        for (int j = 0; j < this->height; j++)
-//        {
-//            for (int i = 0; i < this->width; i++)
-//            {
-//                if (i == x)
-//                {
-//                    this->matrix[i][j].red = 255;
-//                    this->matrix[i][j].blue = 0;
-//                    this->matrix[i][j].green = 0;
-//                }
-//            }
-//            x += this->pathX[p].next[j];
-//        }
-//    }
-

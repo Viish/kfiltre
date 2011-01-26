@@ -164,12 +164,12 @@ void MainWindow::smartResize(int width, int height, KResizeDialog *dialog)
 
 void MainWindow::smartResizeH()
 {
-    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width, getCurrentImage()->height - 1));
+    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width, getCurrentImage()->height - 1), false);
 }
 
 void MainWindow::smartResizeV()
 {
-    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width - 1, getCurrentImage()->height));
+    this->getCurrentTab()->setImage(this->getCurrentImage()->seamCarving(getCurrentImage()->width - 1, getCurrentImage()->height), false);
 }
 
 void MainWindow::rotateClockwise()

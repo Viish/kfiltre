@@ -30,7 +30,7 @@ public:
     Tab(MainWindow *main, QString);
     ~Tab();
     KImage* getImage();
-    void setImage(KImage*);
+    void setImage(KImage*, bool = false);
     void refresh(KImage*);
     void hideSelection();
     void drawRect(int, int, int, int);

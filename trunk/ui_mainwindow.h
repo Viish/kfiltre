@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Sun Jan 23 15:11:14 2011
-**      by: Qt User Interface Compiler version 4.6.2
+** Created: Tue Jan 25 11:50:01 2011
+**      by: Qt User Interface Compiler version 4.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -295,10 +295,9 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionClose);
         menuImage->addAction(actionCrop);
-        menuImage->addAction(actionGrayscale);
         menuImage->addAction(actionFusion);
-        menuImage->addAction(actionResize);
         menuImage->addSeparator();
+        menuImage->addAction(actionResize);
         menuImage->addAction(actionVertical_Resize);
         menuImage->addAction(actionHorizontal_Resize);
         menuImage->addSeparator();
@@ -311,6 +310,7 @@ public:
         menuHistogram->addAction(actionEqualize);
         menuHistogram->addAction(actionNormalize);
         menuFilters->addAction(actionBlur);
+        menuFilters->addAction(actionGrayscale);
         menuFilters->addAction(actionNegative);
         menuFilters->addAction(actionPaint);
         menuFilters->addAction(actionSmooth);
@@ -437,9 +437,9 @@ public:
         actionEdge_Enhancement->setText(QApplication::translate("MainWindow", "Edge Enhancement", 0, QApplication::UnicodeUTF8));
         actionPaint->setText(QApplication::translate("MainWindow", "Paint", 0, QApplication::UnicodeUTF8));
         actionEdge_Detection->setText(QApplication::translate("MainWindow", "Edge Detection", 0, QApplication::UnicodeUTF8));
-        actionVertical_Resize->setText(QApplication::translate("MainWindow", "Smart Vertical Resize", 0, QApplication::UnicodeUTF8));
+        actionVertical_Resize->setText(QApplication::translate("MainWindow", "Vertical Smart Resize", 0, QApplication::UnicodeUTF8));
         actionVertical_Resize->setShortcut(QApplication::translate("MainWindow", "V", 0, QApplication::UnicodeUTF8));
-        actionHorizontal_Resize->setText(QApplication::translate("MainWindow", "Smart Horizontal Resize", 0, QApplication::UnicodeUTF8));
+        actionHorizontal_Resize->setText(QApplication::translate("MainWindow", "Horizontal Smart Resize", 0, QApplication::UnicodeUTF8));
         actionHorizontal_Resize->setShortcut(QApplication::translate("MainWindow", "H", 0, QApplication::UnicodeUTF8));
         actionNegative->setText(QApplication::translate("MainWindow", "Negative", 0, QApplication::UnicodeUTF8));
         actionSmooth->setText(QApplication::translate("MainWindow", "Smooth", 0, QApplication::UnicodeUTF8));
@@ -451,6 +451,7 @@ public:
         actionEllipse->setText(QApplication::translate("MainWindow", "Ellipse", 0, QApplication::UnicodeUTF8));
         actionEllipse->setShortcut(QApplication::translate("MainWindow", "E", 0, QApplication::UnicodeUTF8));
         actionPath->setText(QApplication::translate("MainWindow", "Path", 0, QApplication::UnicodeUTF8));
+        actionPath->setShortcut(QApplication::translate("MainWindow", "P", 0, QApplication::UnicodeUTF8));
         menuFile->setTitle(QApplication::translate("MainWindow", "File", 0, QApplication::UnicodeUTF8));
         menuImage->setTitle(QApplication::translate("MainWindow", "Image", 0, QApplication::UnicodeUTF8));
         menuHistogram->setTitle(QApplication::translate("MainWindow", "Histogram", 0, QApplication::UnicodeUTF8));
